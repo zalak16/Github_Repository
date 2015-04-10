@@ -1,5 +1,12 @@
 
 import java.lang.Object;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.Vector;
 
 import Util.LogGamma;
 public class Bender
@@ -120,6 +127,438 @@ public class Bender
 			sqsum_r += r[i] * r[i] - r[i];
 		  }
 	    }
+		
+		
+		 double motif_sample_log(Graph64 motif, short k, long num_samples)
+		 {
+			 //Init
+			 Vector<Double> results = new Vector<Double>();//vector<double> result
+			 Vector<Double> result_buffer = new Vector<Double>(); //vector<double> result_buffer;
+			 long BUF_SIZE = 1000000; //maximum size of results vector, should be at least 1e6
+			 Vector<Short> odg = new Vector<Short>(); //vector<short> 
+			 Vector<Short> idg = new Vector<Short>(); //vector<short>
+			 
+			 noautoms (odg, idg, motif, k, this.directed, results);
+			 
+			 int num_graphs = odg.size() / k;
+			 
+			 short[] odeg = new short[k];
+			 short[] ideg = new short[k];
+			 long[] pos = new long[k];
+			 
+			 ArrayList<Long> candidate_indices = new ArrayList<Long>(); //vector<uint64>
+			 
+				for (int i = 0; i!=n; ++i) 
+				{
+					if (directed)
+					{
+						for (int j = 0; j!= k; ++j) 
+						{ 
+							if ((r[i] >= odg.get(j)) && (c[i] >= idg.get(j))) 
+							{
+								candidate_indices.add((long) i);//candidate_indices.push_back(i);
+								break;
+							}
+						}
+					} 
+					else
+					{
+						for (int j = 0; j!= k; ++j) 
+						{
+							if ((r[i] >= odg.get(j))) 
+							{
+								candidate_indices.add((long)i); //candidate_indices.push_back(i);
+								break;
+							}
+						}
+					}
+				}
+				
+				long new_n = candidate_indices.size();
+				
+				//cout << "For motif ID " << motif << " we have " << new_n 
+				//	 << " candidates out of " << n << " vertices." << endl;
+			    boolean[] taken = new boolean[(int)new_n];
+				for (int i = 0; i!= new_n; ++i)
+				{
+					taken[i] = false;
+				}
+				
+				//Main sample loop
+				double maximum = 0.0;
+				long cand; //uint64 cand;
+				if (new_n >= k) 
+				{
+					for (int i = 0; i!=num_samples; ++i)
+					{
+//						if(i % 10000 == 0)
+//							System.out.println(i);
+						for (int j=0; j!= k; ++j) 
+						{
+							do
+							{
+								//cand = (long) ++rand%new_n; // Need to change this
+//								double random = Math.random();
+//								if(random < 0)
+//								{
+//									random = random * -1;
+//								}
+								cand = rand.nextInt((int)new_n); // Need to change this
+							} while (taken[(int) cand]);
+							taken[(int) cand] = true;
+							pos[j] = cand;
+						}
+
+						for (int j=0; j!= k; ++j) 
+						{
+							taken[(int) pos[j]] = false;
+							pos[j] = candidate_indices.get((int) pos[j]);//pos[j] = candidate_indices[pos[j]];
+						}
+
+						for (int j=0; j!= num_graphs; ++j)
+						{
+							if (directed) 
+							{
+							/*	for (int l = 0; l!= k; ++l)
+								{
+									odeg[l] = odg[j*k + l];
+									ideg[l] = idg[j*k + l];
+								}
+								calc_motif_dir(pos, odeg, ideg, k, results);*/
+							}
+							else
+							{
+								for (int l = 0; l!= k; ++l)
+								{
+									odeg[l] = odg.get(j*k+l); //odg[j*k + l];
+								}
+								calc_motif_undir(pos, odeg, k, results);
+							}
+
+							if (results.size() > BUF_SIZE) // (results.size() > BUF_SIZE)
+							{
+								double sum = 0.0;
+								long l = 0;
+								//Arrays.sort(results);//sort(results.begin(), results.end());
+								Collections.sort(results);
+								if (result_buffer.size() == 0) //(result_buffer.size() == 0)
+									maximum = results.get(results.size() - 1); //[maximum = results[results.size()-1];
+								while (l != BUF_SIZE)
+								{
+									sum += Math.exp(results.get((int) l)-maximum); //  exp(results[l]-maximum);
+									++l;
+								}
+								
+								removeInRange(results, 0, (int)BUF_SIZE); //results.erase(results.begin(),results.begin()+BUF_SIZE);
+								result_buffer.add(sum);//result_buffer.push_back(sum);
+								
+							}
+						}
+					}
+				}
+			 
+				//apply correctional factor due to vertex selection
+				double p = 1.0;
+
+				for (int i = 0; i != k; ++i)
+				{
+					p *= ((double)(new_n - i))/((double)(n-i)); //double(new_n - i) / double(n-i);
+				}
+				
+			    //cout << "correctional factor " << p << endl;
+
+				//Calculate results
+				Collections.sort(results); //sort(results.begin(), results.end());
+				double ret = 0.0;
+				if (results.size() > 0)
+				{
+					//cout << "Number of actual samples: " 
+					//	 << (result_buffer.size() * BUF_SIZE + results.size()) << endl;
+					if(result_buffer.size() == 0)
+						maximum = results.get(results.size() - 1); //maximum = results[results.size()-1];
+					//double maximum = results[results.size()-1];
+					double sum = 0;
+					//for (vector<double>::size_type i = 0; i!= results.size(); ++i) {
+					Iterator<Double> iter = results.iterator();
+					while(iter.hasNext())
+					{
+						//sum += exp(results[i]-maximum);
+						sum+= Math.exp(iter.next() - maximum);
+					}
+					Iterator<Double> iter1 = result_buffer.iterator();
+					//for (vector<double>::size_type i = 0; i!= result_buffer.size(); ++i) {
+					while(iter1.hasNext())
+					{
+						//sum += result_buffer[i];
+						sum+=iter1.next();
+					}
+
+					ret = maximum+Math.log(sum)-Math.log(((double)num_samples)/(p));
+				} 
+				else 
+				{
+					ret = Math.sqrt(-1.0);
+				}
+
+				//Clean up
+				results.clear();
+				candidate_indices.clear();
+				
+				pos = null;
+				taken = null;
+				odg.clear();
+				idg.clear();
+				odeg = null;
+				ideg = null;
+				return ret;
+		 }
+		 
+		 
+		 
+
+		 private void removeInRange(Vector<Double> results, int begin, int end) 
+		 {
+			 for(int i=0; i<=results.size(); i++)
+			 {
+				 if(results.elementAt(i)!= null)
+					 results.removeElementAt(i);
+			 }
+		 }
+
+		private void calc_motif_undir(long[] positions, short[] degrees, short k,
+				Vector<Double> results)
+		{
+			//cout << "WARNING -- UNSTABLE!!! " << endl;
+			//cout.flush();
+			long fn = this.f; // uint64
+			long sqn = this.sqsum_r; //uint64
+			for (int i = 0; i != k ; ++i) {
+				if (r[(int) positions[i]] < degrees[i]) {
+					//cout << "GA";
+					return;
+				}
+				
+				if(positions[i] <= 2)
+				{					
+					fn -= degrees[(int) positions[i]]; //Added
+				}
+				
+				sqn = sqn - (r[(int) positions[i]]*r[(int) positions[i]] - r[(int) positions[i]]); //Added cast to int
+			}
+			double olda = (this.sqsum_r)/(2*this.f);
+			double newa = (sqn)/(2*fn);
+			double oldb = 0;
+			long  be = 0; //uint64
+			for (int i = 0; i != k ; ++i)
+				for (int j = i+1; j < k ; ++j)
+					be += r[(int)positions[i]]*r[(int)positions[i]];
+			double newb = (be) /(fn);
+			double changelog = 0;
+			for (int i = 0; i != k ; ++i)
+				changelog += logfac_r[(int)positions[i]]- lgamma.logGamma(r[(int)positions[i]] - degrees[i]+1);
+			double x = 0;
+				x= 	( ((fn)*Math.log((fn)/EXP) - (f)*Math.log((f)/EXP) ) / 2
+					 +olda*olda+olda-newa*newa-newa-newb
+					 +changelog );
+			results.add(x);//result.push_back(x);
+			//cout << x;
+			return;
+			 
+		}
+
+		void adj(Graph64 g, short k) {
+			short shift;
+			for (int i= 0; i!=k ; ++i)
+			{
+				{
+				for (int j= 0; j!=k ; ++j) {
+					
+					shift = (short) (63 - i*8 -j);
+					  System.out.println((g.data>>shift)&1);//cout << ((g>>shift)&1);
+				}
+				System.out.println("\n");
+				}
+			}
+			System.out.println("\n");
+			return;
+		}
+		
+		Graph64 getcanonical (final Graph64 g, final short k) {
+			Graph64 gr = g;  //register
+			long tmp1; //register
+			long tmp2; //register
+			int[] c = new int[k+1]; //register unsigned short
+			int[] o = new int[k+1]; //register unsigned short
+			short j = k; //register
+			short s = 0; //register
+			short q; //register
+			short t1; //register
+			short t2; //register
+			Graph64 canon = g; //register
+
+			for (int i = 0; i!=k+1 ; ++i) {	  
+				c[i] = 0;	
+				o[i] = 1;  
+			}	
+
+			while (j != 0) {
+				q = (short) (c[j] + o[j]);
+				if (q < 0) {
+					o[j] = -o[j];	
+					--j;
+				} else if (q == j) {
+					++s;
+					o[j] = -o[j];	
+					--j;
+				} else if (q > -1) {
+					t1 = (short) (j-q+s);
+					t2 = (short) (j-c[j]+s);
+					if (t1 > t2) { 
+						t1 ^= t2; 
+						t2 ^= t1;
+						t1 ^= t2;
+					}
+					tmp1  =  gr.data & MSKSEG[t1];
+					tmp2  =  gr.data & MSKSEG[t2];
+					gr.data   &=  DELSEG[t1];
+					gr.data   |=  (tmp1 >> 8);
+					gr.data   |=  (tmp2 << 8);
+					tmp1  =  gr.data & MSKBIT[t1];
+					tmp2  =  gr.data & MSKBIT[t2];
+					gr.data   &=  DELBIT[t1];
+					gr.data   |=  (tmp1 >> 1);
+					gr.data   |=  (tmp2 << 1);
+					// compare to max
+					if (gr.data > canon.data) {
+						canon = gr;
+					}
+					//continue algorithm
+					if(q >=0 && q <= 65535)  // since c is unsigned short so checking the where q is in the range of unsigned short or not
+					{
+						c[j] = q;	
+					}
+					j = k;
+					s = 0;
+				}
+			}	
+			c = null; //delete[]c
+			o = null; //delete[]o
+			return canon;
+		}
+		
+
+		private void noautoms(Vector<Short> odg, Vector<Short> idg, Graph64 g, short k,
+				boolean directed, Vector<Double> result)
+		{
+			Graph64 gr = new Graph64();
+			gr.data = 0L; //register
+			HashSet<Long> already = new HashSet<Long>();//std::set<graph64> already; it stores data of graph64 not object
+			short[] odeg = new short[k];
+			short[] ideg = new short[k];
+			for (int i = 0; i < k ; ++i)
+			{
+				odeg[i] = 0;	
+				ideg[i] = 0;  
+			}
+			//Convert graph format
+			for (int i = 0; i!= k; ++i) 
+			{
+				for (int j = 0; j!= k; ++j) 
+				{
+					if ((g.data & (1L << i+j*k)) > 0) 
+					{
+						new Graph64().SET(gr,j,i);
+						++ideg[i];
+						++odeg[j];
+					}
+				}
+			}
+			
+			long tmp1; //register uint64
+			long tmp2; //register uint64
+			int[]  c = new int[k+1]; //register unsigned short
+			int[] o = new int[k+1]; //register  unsigned short*
+			short j = k; //register
+			short s = 0; //register
+			short q; // register
+			short t1; // register
+			short t2; //register
+		
+			for (int i = 0; i!=k+1 ; ++i)
+			{	 
+				c[i] = 0;	
+				o[i] = 1;  
+			}	
+			already.add(gr.data); //already.insert(gr);
+			for (int i = 0; i!= k; ++i)
+			{
+				idg.add(ideg[i]);
+				odg.add(odeg[i]);
+			}
+			
+			while (j != 0)
+			{
+				q = (short) (c[j] + o[j]);
+				if (q < 0) 
+				{
+					o[j] = -o[j];	
+					--j;
+				}
+				else if (q == j) 
+				{
+					++s;
+					o[j] = -o[j];	
+					--j;
+				}
+				else if (q > -1) 
+				{
+					t1 = (short) (j-q+s);
+					t2 = (short) (j-c[j]+s);
+					if (t1 > t2)
+					{ 
+						t1 ^= t2; 
+						t2 ^= t1;
+						t1 ^= t2;
+					}
+					tmp1 = ideg[t1-1];
+					ideg[t1-1] = ideg[t2-1];
+					ideg[t2-1] = (short) tmp1;
+					tmp1 = odeg[t1-1];
+					odeg[t1-1] = odeg[t2-1];
+					odeg[t2-1] = (short) tmp1;
+					tmp1  =  gr.data & MSKSEG[t1];
+					tmp2  =  gr.data & MSKSEG[t2];
+					gr.data   &=  DELSEG[t1];
+					gr.data   |=  (tmp1 >> 8);
+					gr.data   |=  (tmp2 << 8);
+					tmp1  =  gr.data & MSKBIT[t1];
+					tmp2  =  gr.data & MSKBIT[t2];
+					gr.data   &=  DELBIT[t1];
+					gr.data   |=  (tmp1 >> 1);
+					gr.data   |=  (tmp2 << 1);
+					if(!already.contains(gr.data))//if (already.count(gr) == 0)
+					{
+						already.add(gr.data);
+						for (int i = 0; i!= k; ++i)
+						{
+							idg.add(ideg[i]);
+							odg.add(odeg[i]);
+						}
+					}	
+					c[j] = q;
+					j = k;
+					s = 0;
+				}
+			}	
+			
+			c = null; //delete[]
+			 o = null; //delete[]
+			odeg = null; //delete[]
+			ideg = null; //delete[]
+			already.clear();
+			return;
+		}
+		
 	
 	
 }

@@ -28,7 +28,7 @@ public class Variables
 		num_lonely_nodes = 0;
 		num_single_edges = 0;
 		num_mutual_edges = 0;
-		directed = false;
+		directed = true;
 	}
 	
 

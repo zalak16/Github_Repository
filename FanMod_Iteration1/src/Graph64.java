@@ -13,6 +13,22 @@ import Typedef.Vertex;
 
 public class Graph64
 {	
+	/**
+	 * @param data
+	 */
+	public Graph64(long data)
+	{
+		super();
+		this.data = data;
+	}
+
+	/**
+	 * 
+	 */
+	public Graph64()
+	{
+		super();
+	}
 	public long data;
 
 
@@ -206,8 +222,10 @@ public class Graph64
 		    variable.m = variable.edges.size();
 	}
 	
-	public static void main(String args[])
-	{
-		new Graph64().read_graph("Scere2014Oct_index.txt", new Variables());
-	}
+//	public static void main(String args[])
+//	{
+//		new Graph64().read_graph("Scere2014Oct_index.txt", new Variables());
+//	}
+
+	
 }
