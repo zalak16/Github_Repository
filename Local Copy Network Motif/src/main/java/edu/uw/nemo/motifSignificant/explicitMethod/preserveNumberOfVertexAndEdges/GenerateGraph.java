@@ -1,5 +1,6 @@
 package edu.uw.nemo.motifSignificant.explicitMethod.preserveNumberOfVertexAndEdges;
 
+import edu.uw.nemo.labeler.GraphLabel;
 import edu.uw.nemo.model.AdjacencyMapping;
 import edu.uw.nemo.model.AdjacentVertexWithEdge;
 import edu.uw.nemo.model.Mapping;
