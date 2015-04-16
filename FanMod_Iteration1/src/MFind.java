@@ -1,4 +1,4 @@
-import java.security.KeyStore.Entry;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -11,11 +11,15 @@ import Typedef.Vertex;
 public class MFind
 {
 	
-	static int digits(long k)
+	static int digits(BigInteger data)
 	{
 		int ret = 0;
-		while (k != 0)
-		{   k /= 10;++ ret;	}
+		while (!data.equals(BigInteger.ZERO))
+		{
+			//data /= 10;++ ret;
+			data = data.divide(BigInteger.valueOf(10));
+			++ret;
+		}
 		return ret;
 	}
 	
@@ -32,13 +36,13 @@ public class MFind
 		
 		//boolean directed = true;
 		Variables var = new Variables();
-		long SMPLS =  1000000; //uint64
+		//long SMPLS =  1000000; //uint64
 		short G_N = 3;
 		//randlib::rand rand(time(NULL));
 		long currentTime = System.currentTimeMillis();
 		Random rand = new Random(currentTime);
 		Init init = new Init();
-		int ret = init.process_flags(args.length, args, SMPLS, G_N, var);
+		int ret = init.process_flags(args.length, args, G_N, var);
 		if(ret != -1)
 		{
 			return;
@@ -106,10 +110,12 @@ public class MFind
 		
 		int total_num_subgraphs_undir[] = {1,1,1,2,6,21,112,853,11117,261080};
 		//int total_num_subgraphs_dir[7]   = {1,1,2,13,199,9364,1530843};
-		long num_samples = SMPLS;
-		Graph64 subgraph_library3_undir[] = {new Graph64(78), new Graph64(238)};
+		long num_samples = var.SMPLS;
+		Graph64 subgraph_library3_undir[] = {new Graph64(new BigInteger("78")), new Graph64(new BigInteger("238"))};
 	    //long subgraph_library3_dir[] = {6,12,14,36,38,46,78,102,140,164,166,174,238}; //graph64
-		Graph64 subgraph_library4_undir[] = {new Graph64(4382),new Graph64(4932),new Graph64(4958),new Graph64(13260),new Graph64(13278),new Graph64(31710)}; //graph64
+		Graph64 subgraph_library4_undir[] = {new Graph64(new BigInteger("4382")),new Graph64(new BigInteger("4932")),
+											new Graph64(new BigInteger("4958")),new Graph64(new BigInteger("13260")),
+											new Graph64(new BigInteger("13278")),new Graph64(new BigInteger("31710"))}; //graph64
 //	    long subgraph_library4_dir[] = {14, 28, 30, 74, 76, 78, 90, 92, 94, 204, 206, 222, 280, 282, 286,  //graph64 
 //			                          328, 330, 332, 334, 344, 346, 348, 350, 390, 392, 394, 396, 398, 
 //			                          404, 406, 408, 410, 412, 414, 454, 456, 458, 460, 462, 468, 470, 
@@ -236,15 +242,15 @@ public class MFind
 				System.out.println("\n   Motif " + i+1  + " of 2");
 //				cout.flush();
 				res[i] = bender.motif_sample_log(subgraph_library3_undir[i],(short) 3,num_samples);
-				for (int h = 0; h != 14 + digits(i+1); ++h)
+				for (int h = 0; h != (14 + digits(BigInteger.valueOf((i+1)))); ++h)
 					System.out.print("\b"); //cout << '\b';
 			}
 			
 			elapsed = (double) (System.currentTimeMillis() - start_time) / 1000; //Clocks_Per_sec = 1000
 			//cout.precision(3);
 			System.out.println(" - Overall time: " + elapsed + " seconds  \n");
-			DecimalFormat df = new DecimalFormat("#.#");
-			System.out.println(" - time per sample: " + df.format((elapsed/(double)(total_num_subgraphs_undir[G_N]))/(double)(num_samples)*1000000.0 + " microseconds \n"));
+			DecimalFormat df = new DecimalFormat("#.##");
+			System.out.println(" - time per sample: " + df.format((elapsed/(double)(total_num_subgraphs_undir[G_N]))/(double)(num_samples)*1000000.0)+ " microseconds \n");
 			
 			double max = -50000000.0;
 			for (int i = 0; i!= 2; ++i) 
@@ -270,10 +276,11 @@ public class MFind
 			
 			for(int i=0; i!= 2; ++i)
 			{
-				System.out.println(" Motif " + df.format((3 - (digits(subgraph_library3_undir[i].data))) + " " + subgraph_library3_undir[i].data + " : "));
+				System.out.print(" Motif " + df.format((3 - (digits(subgraph_library3_undir[i].data)))) + " " + subgraph_library3_undir[i].data + " : ");
 				if(!(res[i] != res[i]))
 				{
 					System.out.println(df.format((res[i]/sum)) + " \n");
+					//System.out.println((res[i]/sum) + " \n");
 				}
 				else
 				{
@@ -292,7 +299,7 @@ public class MFind
 				
 				res[i] = bender.motif_sample_log(subgraph_library4_undir[i], (short)4, num_samples);
 				
-				for(int h= 0; h!= (14 + digits(i+1)); ++h)
+				for(int h= 0; h!= (14 + digits(new BigInteger(Integer.toString((i+1))))); ++h)
 				{
 					System.out.println("\b");
 				}

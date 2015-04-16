@@ -17,6 +17,7 @@ public class Variables
 	public long num_single_edges;
 	public long num_mutual_edges;
 	public boolean directed;
+	public long SMPLS;
 	
 	public Variables()
 	{
@@ -29,6 +30,7 @@ public class Variables
 		num_single_edges = 0;
 		num_mutual_edges = 0;
 		directed = true;
+		SMPLS = 1000000;
 	}
 	
 

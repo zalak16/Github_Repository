@@ -1,10 +1,12 @@
 package Typedef;
 
+import java.math.BigInteger;
+
 public class Edge
 {		
-	public long data;
+	public BigInteger data;
 	
-	public Edge(long data)
+	public Edge(BigInteger data)
 	{
 		this.data = data;
 	}
@@ -12,5 +14,8 @@ public class Edge
 	public Edge()
 	{
 		super();
+		
+		data = BigInteger.ZERO;
+		
 	}
 }

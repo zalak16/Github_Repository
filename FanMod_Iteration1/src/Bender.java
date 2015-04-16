@@ -1,5 +1,6 @@
 
 import java.lang.Object;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,18 +57,23 @@ public class Bender
 	private long[]r;
 	private long []c;
 	private double b;
-	private long f;
+	//private long f;
+	private BigInteger f;
 	private double[] logfac_r;
 	private double[] logfac_c;
     private double[] logfac_f;
 	private double[] logfac_cache;
-	private long sqsum_r;
-	private long sqsum_c;
-	private long maxdeg;
+	//private long sqsum_r;
+	private BigInteger sqsum_r;
+	//private long sqsum_c;
+	private BigInteger sqsum_c = BigInteger.ZERO;
+	//private long maxdeg;
+	private BigInteger maxdeg = BigInteger.ZERO;
 	private LogGamma lgamma;
 	//randlib::rand rand;
 	Random rand;
 	
+
 	// for directed grpah constructor
 //	explicit bender(long n, long *r, long *c, randlib::rand rand) {
 //	      this->directed = true;
@@ -107,8 +113,7 @@ public class Bender
 //		  }
 //		  this->b = double(tmp)/double(f);
 //	    }
-	
-	
+
 		public Bender(long n, long[] r, Random rand) {
 	      this.directed = false;
 		  this.n = n;
@@ -116,15 +121,17 @@ public class Bender
 		  this.b = 0;
 		  this.rand = rand;
 		  this.lgamma = new LogGamma();
-		  f = 0;
-		  sqsum_r = 0;
+		  f  = BigInteger.ZERO;
+		  sqsum_r = BigInteger.ZERO;
 		  logfac_r = new double[(int) n];
 		  for (int i = 0; i != n; ++i)
 		  {
 			  
 			logfac_r[i] = lgamma.logGamma((double)(r[i]+1)); 
-			f+=r[i];
-			sqsum_r += r[i] * r[i] - r[i];
+			//f+=r[i];
+			f = f.add(BigInteger.valueOf(r[i]));
+			//sqsum_r += r[i] * r[i] - r[i];
+			sqsum_r = sqsum_r.add(new BigInteger(Long.toString(r[i] * r[i] - r[i])));
 		  }
 	    }
 		
@@ -132,7 +139,7 @@ public class Bender
 		 double motif_sample_log(Graph64 motif, short k, long num_samples)
 		 {
 			 //Init
-			 Vector<Double> results = new Vector<Double>();//vector<double> result
+			 ArrayList<Double> results = new ArrayList<Double>();
 			 Vector<Double> result_buffer = new Vector<Double>(); //vector<double> result_buffer;
 			 long BUF_SIZE = 1000000; //maximum size of results vector, should be at least 1e6
 			 Vector<Short> odg = new Vector<Short>(); //vector<short> 
@@ -187,22 +194,16 @@ public class Bender
 				//Main sample loop
 				double maximum = 0.0;
 				long cand; //uint64 cand;
+				
 				if (new_n >= k) 
 				{
 					for (int i = 0; i!=num_samples; ++i)
 					{
-//						if(i % 10000 == 0)
-//							System.out.println(i);
+
 						for (int j=0; j!= k; ++j) 
 						{
 							do
 							{
-								//cand = (long) ++rand%new_n; // Need to change this
-//								double random = Math.random();
-//								if(random < 0)
-//								{
-//									random = random * -1;
-//								}
 								cand = rand.nextInt((int)new_n); // Need to change this
 							} while (taken[(int) cand]);
 							taken[(int) cand] = true;
@@ -219,12 +220,7 @@ public class Bender
 						{
 							if (directed) 
 							{
-							/*	for (int l = 0; l!= k; ++l)
-								{
-									odeg[l] = odg[j*k + l];
-									ideg[l] = idg[j*k + l];
-								}
-								calc_motif_dir(pos, odeg, ideg, k, results);*/
+							
 							}
 							else
 							{
@@ -316,22 +312,28 @@ public class Bender
 		 
 		 
 
-		 private void removeInRange(Vector<Double> results, int begin, int end) 
+		 private void removeInRange(ArrayList<Double> results, int begin, int end) 
 		 {
 			 for(int i=0; i<=results.size(); i++)
 			 {
-				 if(results.elementAt(i)!= null)
-					 results.removeElementAt(i);
+				// if(results.elementAt(i)!= null)
+					// results.removeElementAt(i);
+				 if(results.get(i) != null)
+				 {
+					 results.remove(i);
+				 }
 			 }
 		 }
 
 		private void calc_motif_undir(long[] positions, short[] degrees, short k,
-				Vector<Double> results)
+				ArrayList<Double> results)
 		{
 			//cout << "WARNING -- UNSTABLE!!! " << endl;
 			//cout.flush();
-			long fn = this.f; // uint64
-			long sqn = this.sqsum_r; //uint64
+			//long fn = this.f; // uint64
+			BigInteger fn = this.f;
+			//long sqn = this.sqsum_r; //uint64
+			BigInteger sqn = this.sqsum_r;
 			for (int i = 0; i != k ; ++i) {
 				if (r[(int) positions[i]] < degrees[i]) {
 					//cout << "GA";
@@ -340,28 +342,35 @@ public class Bender
 				
 				if(positions[i] <= 2)
 				{					
-					fn -= degrees[(int) positions[i]]; //Added
+					//fn -= degrees[(int) positions[i]]; //Added
+					fn = fn.subtract(BigInteger.valueOf(degrees[(int)positions[i]]));
 				}
 				
-				sqn = sqn - (r[(int) positions[i]]*r[(int) positions[i]] - r[(int) positions[i]]); //Added cast to int
+				//sqn = sqn - (r[(int) positions[i]]*r[(int) positions[i]] - r[(int) positions[i]]); //Added cast to int
+				sqn = sqn.subtract(BigInteger.valueOf((r[(int) positions[i]]*r[(int) positions[i]] - r[(int) positions[i]])));
 			}
-			double olda = (this.sqsum_r)/(2*this.f);
-			double newa = (sqn)/(2*fn);
+			
+			//double olda = (double)(this.sqsum_r)/(double)(2*this.f);
+			double olda = this.sqsum_r.doubleValue()/(2 * this.f.doubleValue());
+			//double newa = (double)(sqn)/(double)(2*fn);
+			double newa = sqn.doubleValue()/ (2 * fn.doubleValue());
 			double oldb = 0;
 			long  be = 0; //uint64
 			for (int i = 0; i != k ; ++i)
 				for (int j = i+1; j < k ; ++j)
 					be += r[(int)positions[i]]*r[(int)positions[i]];
-			double newb = (be) /(fn);
+		//	double newb = (double)(be) /(double)(fn);
+			double newb = (double) (be) / fn.doubleValue();
 			double changelog = 0;
 			for (int i = 0; i != k ; ++i)
 				changelog += logfac_r[(int)positions[i]]- lgamma.logGamma(r[(int)positions[i]] - degrees[i]+1);
 			double x = 0;
-				x= 	( ((fn)*Math.log((fn)/EXP) - (f)*Math.log((f)/EXP) ) / 2
+				x= 	( ((fn.doubleValue())*Math.log((fn.doubleValue())/EXP) - (f.doubleValue())*Math.log((f.doubleValue())/EXP) ) / 2
 					 +olda*olda+olda-newa*newa-newa-newb
 					 +changelog );
 			results.add(x);//result.push_back(x);
-			//cout << x;
+			//cout >> x;
+			//System.out.println("olda: " + olda + "newa: " + newa + "newb: " + newb + "changelog: " + changelog + "x: " + x);
 			return;
 			 
 		}
@@ -374,7 +383,8 @@ public class Bender
 				for (int j= 0; j!=k ; ++j) {
 					
 					shift = (short) (63 - i*8 -j);
-					  System.out.println((g.data>>shift)&1);//cout << ((g>>shift)&1);
+					  //System.out.println((g.data>>shift)&1);//cout << ((g>>shift)&1);
+					System.out.println((g.data.shiftRight(shift).and(BigInteger.ONE)));
 				}
 				System.out.println("\n");
 				}
@@ -385,8 +395,10 @@ public class Bender
 		
 		Graph64 getcanonical (final Graph64 g, final short k) {
 			Graph64 gr = g;  //register
-			long tmp1; //register
-			long tmp2; //register
+			//long tmp1; //register
+			//long tmp2; //register
+			BigInteger tmp1 = BigInteger.ZERO;
+			BigInteger tmp2 = BigInteger.ZERO;
 			int[] c = new int[k+1]; //register unsigned short
 			int[] o = new int[k+1]; //register unsigned short
 			short j = k; //register
@@ -418,18 +430,33 @@ public class Bender
 						t2 ^= t1;
 						t1 ^= t2;
 					}
-					tmp1  =  gr.data & MSKSEG[t1];
-					tmp2  =  gr.data & MSKSEG[t2];
-					gr.data   &=  DELSEG[t1];
-					gr.data   |=  (tmp1 >> 8);
-					gr.data   |=  (tmp2 << 8);
-					tmp1  =  gr.data & MSKBIT[t1];
-					tmp2  =  gr.data & MSKBIT[t2];
-					gr.data   &=  DELBIT[t1];
-					gr.data   |=  (tmp1 >> 1);
-					gr.data   |=  (tmp2 << 1);
+					BigInteger mask = BigInteger.valueOf(MSKSEG[t1]);
+					//tmp1  =  gr.data & MSKSEG[t1];
+					tmp1 = gr.data.and(mask);
+					mask = BigInteger.valueOf(MSKSEG[t2]);
+					//tmp2  =  gr.data & MSKSEG[t2];
+					tmp2 = gr.data.and(mask);
+					//gr.data   &=  DELSEG[t1];
+					gr.data = gr.data.and(BigInteger.valueOf(DELSEG[t1]));
+					//gr.data   |=  (tmp1 >> 8);
+					gr.data = gr.data.or(tmp1.shiftRight(8));
+					//gr.data   |=  (tmp2 << 8);
+					gr.data = gr.data.or(tmp2.shiftLeft(8));
+					
+					tmp1 = gr.data.and(BigInteger.valueOf(MSKBIT[t1]));
+					//tmp1  =  gr.data & MSKBIT[t1];
+					tmp2 = gr.data.and(BigInteger.valueOf(MSKBIT[t2]));
+					//tmp2  =  gr.data & MSKBIT[t2];
+					
+					//gr.data   &=  DELBIT[t1];
+					gr.data = gr.data.and(BigInteger.valueOf(DELBIT[t1]));
+					
+					gr.data = gr.data.or(tmp1.shiftRight(1));
+					//gr.data   |=  (tmp1 >> 1);
+					//gr.data   |=  (tmp2 << 1);
+					gr.data = gr.data.or(tmp2.shiftLeft(1));
 					// compare to max
-					if (gr.data > canon.data) {
+					if (gr.data.compareTo(canon.data) == 1) {
 						canon = gr;
 					}
 					//continue algorithm
@@ -448,14 +475,15 @@ public class Bender
 		
 
 		private void noautoms(Vector<Short> odg, Vector<Short> idg, Graph64 g, short k,
-				boolean directed, Vector<Double> result)
+				boolean directed, ArrayList<Double> results)
 		{
 			Graph64 gr = new Graph64();
-			gr.data = 0L; //register
-			HashSet<Long> already = new HashSet<Long>();//std::set<graph64> already; it stores data of graph64 not object
-			short[] odeg = new short[k];
-			short[] ideg = new short[k];
-			for (int i = 0; i < k ; ++i)
+			gr.data = BigInteger.ZERO; //register
+			//HashSet<Long> already = new HashSet<Long>();//std::set<graph64> already; it stores data of graph64 not object
+			HashSet<BigInteger> already = new HashSet<BigInteger>();
+			short[] odeg = new short[k+1];
+			short[] ideg = new short[k+1];
+			for (int i = 0; i !=k+1 ; ++i)
 			{
 				odeg[i] = 0;	
 				ideg[i] = 0;  
@@ -465,7 +493,8 @@ public class Bender
 			{
 				for (int j = 0; j!= k; ++j) 
 				{
-					if ((g.data & (1L << i+j*k)) > 0) 
+					//if ((g.data & (1L << i+j*k)) > 0)
+					if((g.data.and(BigInteger.ONE.shiftLeft((i+j*k)))).compareTo(BigInteger.ZERO) == 1)
 					{
 						new Graph64().SET(gr,j,i);
 						++ideg[i];
@@ -474,8 +503,10 @@ public class Bender
 				}
 			}
 			
-			long tmp1; //register uint64
-			long tmp2; //register uint64
+			//long tmp1; //register uint64
+			BigInteger tmp1 = BigInteger.ZERO;
+			//long tmp2; //register uint64
+			BigInteger tmp2 = BigInteger.ZERO;
 			int[]  c = new int[k+1]; //register unsigned short
 			int[] o = new int[k+1]; //register  unsigned short*
 			short j = k; //register
@@ -520,22 +551,34 @@ public class Bender
 						t2 ^= t1;
 						t1 ^= t2;
 					}
-					tmp1 = ideg[t1-1];
+					tmp1 = BigInteger.valueOf(ideg[t1-1]);
 					ideg[t1-1] = ideg[t2-1];
-					ideg[t2-1] = (short) tmp1;
-					tmp1 = odeg[t1-1];
+					ideg[t2-1] =  tmp1.shortValue();
+					tmp1 = BigInteger.valueOf(odeg[t1-1]);
 					odeg[t1-1] = odeg[t2-1];
-					odeg[t2-1] = (short) tmp1;
-					tmp1  =  gr.data & MSKSEG[t1];
-					tmp2  =  gr.data & MSKSEG[t2];
-					gr.data   &=  DELSEG[t1];
-					gr.data   |=  (tmp1 >> 8);
-					gr.data   |=  (tmp2 << 8);
-					tmp1  =  gr.data & MSKBIT[t1];
-					tmp2  =  gr.data & MSKBIT[t2];
-					gr.data   &=  DELBIT[t1];
-					gr.data   |=  (tmp1 >> 1);
-					gr.data   |=  (tmp2 << 1);
+					odeg[t2-1] =  tmp1.shortValue();
+					
+					tmp1 = gr.data.and(BigInteger.valueOf(MSKSEG[t1]));
+					//tmp1  =  gr.data & MSKSEG[t1];
+					//tmp2  =  gr.data & MSKSEG[t2];
+					tmp2 = gr.data.and(BigInteger.valueOf(MSKSEG[t2]));
+					//gr.data   &=  DELSEG[t1];
+					gr.data = gr.data.and(BigInteger.valueOf(DELSEG[t1]));
+					
+					gr.data = gr.data.or(tmp1.shiftRight(8));
+					//gr.data   |=  (tmp1 >> 8);
+					gr.data = gr.data.or(tmp2.shiftLeft(8));
+					//gr.data   |=  (tmp2 << 8);
+					tmp1 = gr.data.and(BigInteger.valueOf(MSKBIT[t1]));
+					tmp2 = gr.data.and(BigInteger.valueOf(MSKBIT[t2]));
+					//tmp1  =  gr.data & MSKBIT[t1];
+					//tmp2  =  gr.data & MSKBIT[t2];
+					gr.data = gr.data.and(BigInteger.valueOf(DELBIT[t1]));
+				//	gr.data   &=  DELBIT[t1];
+					gr.data = gr.data.or(tmp1.shiftRight(1));
+					gr.data = gr.data.or(tmp2.shiftLeft(1));
+					//gr.data   |=  (tmp1 >> 1);
+					//gr.data   |=  (tmp2 << 1);
 					if(!already.contains(gr.data))//if (already.count(gr) == 0)
 					{
 						already.add(gr.data);

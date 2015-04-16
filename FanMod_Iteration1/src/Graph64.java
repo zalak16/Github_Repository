@@ -1,9 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Scanner;
+
+
 
 import Typedef.Edge;
 import Typedef.EdgeType;
@@ -16,9 +17,10 @@ public class Graph64
 	/**
 	 * @param data
 	 */
-	public Graph64(long data)
+	public Graph64(BigInteger data)
 	{
 		super();
+		this.data = BigInteger.ONE;
 		this.data = data;
 	}
 
@@ -29,8 +31,8 @@ public class Graph64
 	{
 		super();
 	}
-	public long data;
-
+//	public long data;
+	public BigInteger data;
 
 	public static final EdgeType NOEDGE_UV = new EdgeType((short)0);
 	public static final EdgeType  DIR_U_T_V = new EdgeType((short) 1);
@@ -45,7 +47,8 @@ public class Graph64
 	public Edge new_edge(Vertex u, Vertex v)
 	{
 		Edge edge = new Edge();
-		edge.data = (u.data << 32) | v.data;
+		edge.data = BigInteger.valueOf((u.data << 32) | v.data);
+		
 	    return edge;
 	}
 
@@ -53,21 +56,25 @@ public class Graph64
 	{
 		Edge edge = new Edge();
 	    if (u.data < v.data) {
-	    	edge.data = (u.data << 32) | v.data;
+	    	//edge.data = (u.data << 32) | v.data;
+	    	edge.data = BigInteger.valueOf(((u.data << 32) | v.data));
 	    } else {
-	    	edge.data = (v.data << 32) | u.data;
+	    	edge.data = BigInteger.valueOf(((v.data << 32) | u.data));
 	    }	    
 	    return edge;
 	}
 
 	Vertex edge_get_u(Edge e)
 	{
-	    return new Vertex(e.data >> 32);
+	    //return new Vertex(e.data >> 32);
+		return new Vertex(Long.parseUnsignedLong((e.data.shiftRight(32)).toString()));
 	}
 
 	Vertex edge_get_v(Edge e)
 	{
-	    return new Vertex(e.data & 4294967295L);
+	    //return new Vertex(e.data & 4294967295L);
+		BigInteger mask = new BigInteger("4294967295");
+		return new Vertex(Long.parseUnsignedLong(e.data.and(mask).toString()));
 	}
 
 	EdgeType reverse(EdgeType et)
@@ -82,7 +89,9 @@ public class Graph64
 		for (int i= 0; i!=8 ; ++i) {
 			for (int j= 0; j!=8 ; ++j) {
 				shift = (short)(63 - i*8 -j);
-				System.out.println ((g.data>>shift)&1);
+				//System.out.println ((g.data>>shift)&1);
+				BigInteger mask = BigInteger.ONE;
+				System.out.println((g.data.shiftRight(shift)).and(mask));
 			}
 			System.out.println("\n");
 		}
@@ -90,12 +99,22 @@ public class Graph64
 		return;
 	}
 
-	public void DEL(Graph64 g, long row, long col) {
-		g.data &= ~(1L << (63-(row*8+col)));
+	public void DEL(Graph64 g, long row, long col) 
+	{
+		//g.data &= ~(1L << (63-(row*8+col)));
+		long mask = Long.parseUnsignedLong((~(1L << (63-(row*8+col))))+"");
+		
+		BigInteger mask1 = BigInteger.valueOf(mask);
+		g.data = g.data.and(mask1);
 	}
 
-	public void SET(Graph64 g, long row, long col) {
-		g.data |=  (1L << (63-(row*8+col)));
+	public void SET(Graph64 g, long row, long col) 
+	{
+		//g.data |=  (1L << (63-(row*8+col)));
+		
+		long mask = Long.parseUnsignedLong((1L << (63-(row*8+col)))+"");
+		BigInteger mask1 = BigInteger.valueOf(mask);
+		g.data = g.data.or(mask1);
 	}
 	
 	

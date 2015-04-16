@@ -4,7 +4,7 @@ import Typedef.Variables;
 public class Init
 {
 
-	public int process_flags(int length, String[] args, long SMPLS, short G_N,
+	public int process_flags(int length, String[] args, short G_N,
 			Variables v)
 	{
 		if(length < 2)
@@ -50,8 +50,8 @@ public class Init
 					return 1;
 				}
 				
-				SMPLS = Long.parseLong(args[i]);
-				if(SMPLS < 0)
+				v.SMPLS = Long.parseLong(args[i]);
+				if(v.SMPLS < 0)
 				{
 					System.out.println("ERROR: Expected number > 0 to follow flag \'-s\' \n");
 					return 1;
@@ -93,7 +93,7 @@ public class Init
 		}
 		
 		System.out.println(" - Subgraph size = " + G_N + "\n");
-		System.out.println(" - Number of samples per subgraph = " + SMPLS + "\n");
+		System.out.println(" - Number of samples per subgraph = " + v.SMPLS + "\n");
 	    System.out.println(" - Input graph is " + (v.directed == true ? "" : "un") +  "directed " + "\n");
 		return  -1;
 	}
