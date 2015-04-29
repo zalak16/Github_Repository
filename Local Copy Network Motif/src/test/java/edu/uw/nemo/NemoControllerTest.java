@@ -11,9 +11,9 @@ public class NemoControllerTest {
     @Test
     public void assertValidMotifCount() {
         NemoController target = new NemoController(/*new Parser(), new ESUGen(), new NautyLabeler(), new DirectCalculator()*/);
-       // Map<String, List<Map.Entry<String, Long>>> actual = target.extract("full_scere_20140427.csv", 3);
-        Map<String, List<Map.Entry<String, Long>>> actual = target.extract("InputGraph3.csv", 3);
-   //     assertEquals(23, actual.size());
+        Map<String, List<Map.Entry<String, Long>>> actual = target.extract("full_scere_20140427.csv", 3);
+//        Map<String, List<Map.Entry<String, Long>>> actual = target.extract("InputGraph2.csv", 3);
+//        assertEquals(23, actual.size());
     }
 
 }

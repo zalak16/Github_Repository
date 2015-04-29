@@ -8,6 +8,7 @@ import edu.uw.nemo.labeler.GraphLabel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Generate motifs of given length with ESU algorithm
@@ -54,6 +55,39 @@ public class ESUGen {
         System.out.println("Enumerating subgraph took " + (System.currentTimeMillis() - start) + " milliseconds.");
     }
 
+    /**
+     * Enumerate sample sub-graphs from the original graph which is represented by the {@code mapping} instance.
+     * @param mapping
+     * @param label
+     * @param length
+     * @param probability: how many vetices
+     */
+    public void enumerateSubgraphs(Mapping mapping, GraphLabel label, int length, double probability) {
+
+        // time start
+        long start = System.currentTimeMillis();
+
+        // get all nodes
+       // List<Integer> nodes = mapping.getIds();
+        List<Integer> nodes = getSampleNodes(mapping.getNodeCount(), probability);
+        // initialize a subgraph of given length
+        SubGraph subGraph = new SubGraph(length, false);
+        // initialize the extension array which will be used to extend the subgraph later
+        List<Integer> extension = new ArrayList<Integer>();
+        for (Integer node : nodes) {
+            // clear the sub graph
+            subGraph.clear();
+            // add the node as the first vertex into the subgraph
+            subGraph.add(node);
+            // add all the neighbours of the first node with id greater than the node itself to the extension
+            filterGreater(extension, mapping.getNeighbours(node), node);
+            // extend subgraph recursively untill required lenght is meet
+            extendSubgraph(mapping, subGraph, extension, 0, extension.size(), length, label);
+        }
+        // time stop
+        System.out.println("Enumerating subgraph took " + (System.currentTimeMillis() - start) + " milliseconds.");
+    }
+
     // Filter those vertices from the {@code neighbours} which have id smaller than the {@code node} itself. Add rest to the {@code extension}.
     private void filterGreater(List<Integer> extension, List<AdjacentVertexWithEdge> neighbours, Integer node) {
         extension.clear();
@@ -62,6 +96,76 @@ public class ESUGen {
                 extension.add(i.getNodeId());
             }
         }
+    }
+
+    /**
+     * Generating list of sample nodes based on probability
+     * @param totalNodes
+     * @param prob
+     * @return
+     */
+    List<Integer> getSampleNodes(int totalNodes, double prob)
+    {
+        List<Integer> nodeList = new ArrayList<Integer>();
+        if(totalNodes == 0)
+        {
+            nodeList.add(-1);
+            return nodeList;
+        }
+        boolean sel[] = new boolean[totalNodes];
+        double rem = (double)totalNodes * prob;
+        int n = (int)rem;
+        n =n + 1;
+
+        if(prob < 0.6) //case of small probabilities
+        {
+            while(n != 0)
+            {
+                int pos = randomNumberGenerator(totalNodes);
+                if(!sel[pos])
+                {
+                    sel[pos] = true;
+                    nodeList.add(pos);
+                    --n;
+                }
+            }
+        }
+        //If probability is large then number of new nodes will also be large.
+        //So in order to avoid that many number of random generation following code
+        //set the selected array true for those many number of nodes which are not going to get selected.
+        //so random number generates number which are are not going get selected. Those number will be less.
+        else //case of large probabilities
+        {
+            n = totalNodes - n;
+            while(n != 0)
+            {
+                int pos = randomNumberGenerator(totalNodes);
+                if(!sel[pos])
+                {
+                    sel[pos] = true;
+                    --n;
+                }
+            }
+            for(int i = 0; i< totalNodes; i++)
+            {
+                if(!sel[i])
+                {
+                    nodeList.add(i);
+                }
+            }
+        }
+        return nodeList;
+    }
+
+    /**
+     * Random object
+     * @return
+     */
+    public int randomNumberGenerator(int n)
+    {
+        long seed =  System.currentTimeMillis();
+        Random rand = new Random(seed);
+        return rand.nextInt(n);
     }
 
     // extend subgraph recursively untill required lenght is meet

@@ -1,0 +1,500 @@
+    3  cat mpi_setup.txt 
+    4  cat compile.sh 
+    5  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+    6  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+    7  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+    8  mpirun -n 4 ./two my_file.txt 
+    9  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   10  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   11  mpirun -n 4 ./two my_file.txt 
+   12  mpdallexit
+   13  mpdboot -n 4 -v
+   14  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   15  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   16  mpirun -n 4 ./two my_file.txt 
+   17  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   18  mpirun -n 4 ./two my_file.txt 
+   19  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   20  mpirun -n 4 ./two my_file.txt 
+   21  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   22  mpirun -n 4 ./two my_file.txt 
+   23  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   24  mpirun -n 4 ./two my_file.txt 
+   25  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   26  mpirun -n 4 ./two my_file.txt 
+   27  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   28  mpirun -n 4 ./two my_file.txt 
+   29  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   30  mpirun -n 4 ./two my_file.txt 
+   31  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   32  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   33  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   34  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   35  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   36  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   37  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   38  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   39  mpirun -n 4 ./two my_file.txt 
+   40  mpirun -n 4 ./two my_file.txt zalak
+   41  mpirun -n 4 ./two my_file.txt Zalak
+   42  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   43  mpirun -n 4 ./two my_file.txt Zalak
+   44  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   45  mpirun -n 4 ./two my_file.txt Zalak
+   46  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   47  mpirun -n 4 ./two my_file.txt Zalak
+   48  mpic++ TwoPhaseIO.cpp -fopenmp -o two
+   49  mpirun -n 4 ./two my_file.txt Zalak
+   50  mpdallexit
+   51  exit
+   52  clear
+   53  cd hadoop-2.4.0/
+   54  sbin/start-dfs.sh
+   55  bin/hdfs -ls /user/zalak
+   56  bin/hdfs dfs -ls /user/zalak
+   57  cd ..
+   58  cd FinalExams/
+   59  hdfs dfs -ls /user/
+   60  hdfs dfs -mkdir /user
+   61  hdfs dfs -mkdir /user/zalak
+   62  hdfs dfs -ls /user/zalak
+   63  hdfs dfs -ls /user
+   64  cd ..
+   65  cd hadoop-2.4.0/
+   66  sbin/stop-dfs.sh
+   67  exit
+   68  cd hadoop-2.4.0/
+   69  bin/start-dfs.sh
+   70  sbin/start-dfs.sh
+   71  sbin/stop-dfs.sh
+   72  cd ..
+   73  ssh uw-320-00
+   74  ssh uw1-320-00
+   75  exit
+   76  ls
+   77  cd Java\ program\ test/
+   78  javac -version
+   79  javac GaleShapley.java 
+   80  java GaleShapley 
+   81  exit
+   82  cd Java\ program\ test/
+   83  javac Participant.java 
+   84  javac GaleShapley.java 
+   85  java GaleShapley 
+   86  exit
+   87  cd Java\ program\ test/
+   88  cd Assgn\ 2/
+   89  javac Points.java 
+   90  javac XYList.java 
+   91  javac ClosestPair.java 
+   92  java ClosestPair 
+   93  exit
+   94  cd Java\ program\ test/
+   95  cd Assgn\ 3
+   96  javac Edges.java 
+   97  javac Vertex.java 
+   98  javac Graph.java 
+   99  javac BipartiteMatching.java 
+  100  java BipartiteMatching 
+  101  exit
+  102  ls
+  103  cp css534_Assignment2/ ~/css534/prog2_grad_su12/
+  104  cp css534_Assignment2/ ~css534/prog2_grad_su12/
+  105  cp css534_Assignment2/ ~css534/prog2_grad_su12/*.pdf
+  106  ls ~css534/prog2_grad_su12/
+  107  exit
+  108  vi .bash_profile
+  109  exit
+  110  cd zcd
+  111  [2~ldfmelkfekeorkeorcd zalak
+  112  clr
+  113  clrscr
+  114  ls
+  115  cd Network\ Motif/
+  116  cd NetworkMotif/
+  117  ls
+  118  cd src/
+  119  ls
+  120  cd tes
+  121  cd test
+  122  ls
+  123  exit
+  124  ls
+  125  cd css534_Assignment3
+  126  ls
+  127  cd invertedindex/
+  128  ls
+  129  cd ../..
+  130  cd hadoop-2.4.0/
+  131  ls
+  132  cd etc/hadoop/
+  133  ls
+  134  emacs slaves
+  135  cd hadoop-2.4.0/
+  136  cat etc/hadoop/slaves
+  137  ./bin/hdfs namenode-format
+  138  ./bin/hdfs namenode -format
+  139  ./sbin/start-dfs.sh
+  140  cd hadoop-2.4.0/
+  141  ./sbin/stop-dfs.sh
+  142  cat history
+  143  history
+  144  stty -echo
+  145  rerereijrereorjednjkddnsjkfndjf
+  146  stty -echo
+  147  kerkerjerjeirje
+  148   cd css534_Assignment2/
+  149      6  ls
+  150      7  cd molecular_dynamics
+  151      8  ls
+  152      9  cat compile.sh
+  153     10  cd ~css534/prog2_grad_su12/
+  154     11  ls
+  155     12  cat compile.sh
+  156     13  cd ~
+  157     14  cd css534_Assignment2/
+  158     15  ls
+  159     16  cd molecular_dynamics
+  160     17  ls
+  161     18  emacs MDout.java
+  162     19  javac MDout.java
+  163     20  cd ../..
+  164     21  cd css534_Assignment3/
+  165     22  ls
+  166     23  cd Original_code/
+  167     24  ls
+  168     25  cd inverted_indexes/
+  169     26  ls
+  170     27  cd ..
+  171     28  cd ..
+  172     29   cd ..
+  173     30  cd CSS534_Assignment4/
+  174     31  ls
+  175     32  cd ..
+  176     33  cd css534_Assignment2/
+  177     34  cd molecular_dynamics
+  178     35  ld
+  179     36  ls
+  180     37  mpirun -np 4 MDmpi_zalak 1000 10000 0 4 | java MDout
+  181     38  cd ~css534/prog2_grad_su12/
+  182     39  ls
+  183     40  mpirun -np MDmpi 1000 10000 100 4 |java MDout
+  184     41  emacs MDout.java
+  185     42  exit
+  186     43  ssh uw1-320-09
+  187     44  cd CSS534_Assignment4/
+  188     45  ./killMProcess.sh
+  189     46  exit
+  190     47  who
+  191     48  xload
+  192     49  exit
+  193     50  who
+  194     51  ssh uw1-320-11
+  195     52  exit
+  196     53  who
+  197     54  ssh uw1-320-10
+  198     55  exit
+  199     56  xload
+  200     57  exit
+  201     58  clear
+  202     59  cd CSS534_Assignment4/
+  203     60  ls
+  204     61  cat compile.sh
+  205     62  ./compile.sh
+  206     63  stty -echo
+  207     64  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  208     65  ./mdmass_zalak zalak Hazal1316 machinefile.txt 13611 4 1 1000 10000 100
+  209     66  ././killMProcess.sh
+  210     67  ./mdmass_zalak zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  211     68  ./ki9l
+  212     69  ./killMProcess.sh
+  213     70  ./mdmass_zalak zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  214     71  stty echo
+  215     72  clear
+  216     73  ls
+  217     74  cd Final_Before_optimization/
+  218     75  ls
+  219     76  ls
+  220     77  cd ..
+  221     78  ls
+  222     79  copy compile.sh Final_Before_optimization/
+  223     80  cp compile.sh Final_Before_optimization/
+  224     81  cd Final_Before_optimization/
+  225     82  ls
+  226     83  ./compile.sh
+  227     84  cd ..
+  228     85  ls
+  229     86  cp machinefile.txt Final_Before_optimization/
+  230     87  cd Final_Before_optimization/
+  231     88  ls
+  232     89  clear
+  233     90  ls
+  234     91  cd ..
+  235     92  ls
+  236     93  ls -l
+  237     94  cp mprocess Final_Before_optimization/
+  238     95  cd Final_Before_optimization/
+  239     96  ls
+  240     97  ls -l
+  241     98  rm mprocess
+  242     99  ls
+  243    100  ln -s ~dslab/MASS/c++/ubuntu/mprocess mprocess
+  244    101  ./compile.sh
+  245    102  ln -s ~dslab/MASS/c++/ubuntu/killMProcess.sh killMprocess.sh
+  246    103  ./compile.sh
+  247    104  clear
+  248    105  ./compile.sh
+  249    106  stty -echo
+  250    107  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  251    108  stty echo
+  252    109  cd ../../..
+  253    110  cd zalak/
+  254    111  cd css534_Assignment2//molecular_dynamics
+  255    112  ls
+  256    113  emacs mpd.hosts
+  257    114  cat mp
+  258    115  cat mpd.hosts
+  259    116  mpirun -np 4 MDmpi_zalak 1000 10000 100 4 | java MDout
+  260    117  exit
+  261    118  who
+  262    119  clear
+  263    120  vi machin
+  264    121  cd CSS534_Assignment4/
+  265    122  ls
+  266    123  vi machinefile.txt
+  267    124  ssh uw1-320-05
+  268    125  exit
+  269    126  who
+  270    127  ssh uw1-320-08
+  271    128  exit
+  272    129  who
+  273    130  ssh uw1-320-07
+  274    131  exit
+  275    132  who
+  276    133  ssh uw1-320-06
+  277    134  exit
+  278    135  who
+  279    136  ssh uw1-320-05
+  280    137  exit
+  281    138  who
+  282    139  ssh uw1-320-10
+  283    140  exit
+  284    141  who
+  285    142  ssh uw1-320-01
+  286    143  exit
+  287    144  ./compil
+  288    145  cd CSS534_Assignment4/
+  289    146  ./compile.sh
+  290    147  stty -echo
+  291    148  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  292    149  ./killMProcess.sh
+  293    150  stty -echo
+  294    151  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 100 0
+  295    152  ./compile.sh
+  296    153  stty -echo
+  297    154  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 100 0
+  298    155  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 100 0
+  299    156  stty -echo
+  300    157  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 1000 0
+  301    158  stty -echo
+  302    159  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 1000 0
+  303    160  ./killMProcess.sh
+  304    161  ./compile.sh
+  305    162  stty -echo
+  306    163  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 1000 0
+  307    164  stty -echo
+  308    165  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 0
+  309    166  ./killMProcess.sh
+  310    167  stty echo
+  311    168  clear
+  312    169  who
+  313    170  ssh uw1-320-00
+  314    171  exir
+  315    172  exit
+  316    173  who
+  317    174  ssh uw1-320-09
+  318    175  exit
+  319    176  who
+  320    177  ssh uw1-320-1
+  321    178  ssh uw1-320-01
+  322    179  exit
+  323    180  cd CSS534_Assignment4/
+  324    181  ls
+  325    182  ./compile.sh
+  326    183  cat compile.sh
+  327    184  vi compile.sh
+  328    185  ./compile.sh
+  329    186  ./compile.sh
+  330    187  clear
+  331    188  ./compile.sh
+  332    189  vi machinefile.txt
+  333    190  stty -echo
+  334    191  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 0
+  335    192  stty echo
+  336    193  ping uw1-320-10
+  337    194  ./killMProcess.sh
+  338    195  stty -echo
+  339    196  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  340    197  ./killMProcess.sh
+  341    198  ./compile.sh
+  342    199  stty -echo
+  343    200  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  344    201  ../kill
+  345    202  ./killMProcess.sh
+  346    203  ./compile.sh
+  347    204  stty -echo
+  348    205  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  349    206  ./killMProcess.sh
+  350    207  ./compile.sh
+  351    208  stty -echo
+  352    209  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  353    210  ./killMProcess.sh
+  354    211  ./compile.sh
+  355    212  stty -echo
+  356    213  ./md zalak Hazal1316 machinefile.txt 13611 4 4 1000 10000 100
+  357    214  ./killMProcess.sh
+  358    215  stty echo
+  359    216  ssh uw1-320-10
+  360    217  exit
+  361    218  xload
+  362    219  cd css534_Assignment2/molecular_dynamics
+  363    220  mpirun MDmpi_zalak 1000 10000 100 4 | java MDout
+  364    221  cat mpd.hosts.
+  365    222  cat mpd.hosts
+  366    223  ssh uw1-320-09
+  367    224  exir
+  368    225  exit
+  369    226  ls
+  370    227  dir
+  371    228  clear
+  372    229  cd CSS534_Assignment4/
+  373    230  ls
+  374    231  who
+  375    232  cd MASS_logs/
+  376    233  ls
+  377    234  vi PID_1_uw1-320-06.uwb.eduresult.txt
+  378    235  #vi PID_1_uw1-320-0[1~.uwb.eduresult.txt
+  379    236  ls -l
+  380    237  cd ..
+  381    238  ls
+  382    239  ./killMProcess.sh
+  383    240  stty -echo
+  384    241  ./md zalak Hazal1316 machinefile.txt 13611 4 1 1000 10000 0
+  385    242  ./killMProcess.sh
+  386    243  stty echo
+  387    244  cd ../
+  388    245  cd css534_Assignment2/molecular_dynamics
+  389    246  clear
+  390    247  ls
+  391    248  cat MDmpi_zalak.cpp
+  392    249  mpic++ MDmpi_zalak.cpp Timer.cpp -fopenmp -o MDmpi_zalak
+  393    250  clear
+  394    251  cat mpd.hosts
+  395    252  clear
+  396    253  mpirun -np 4 ./MDmpi_zalak 1000 10000 100 4 >> coordinateOutput.txt
+  397    254  cat coordinateOutput.txt
+  398    255  ls
+  399    256  cat mpi_setup.txt
+  400    257  mpdboot -n 4 -v
+  401    258  clear
+  402    259  rm coordinateOutput.txt
+  403    260  mpirun -np 4 ./MDmpi_zalak 1000 10000 100 4 >> coordinateOutput.txt
+  404    261  cat coordinateOutput.txt
+  405    262  clear
+  406    263  mpirun -np 4 ./MDmpi_zalak 1000 10000 0 4
+  407    264  mpirun -np 4 ./MDmpi_zalak 1000 10000 0 1
+  408    265  mpirun -np 1 ./MDmpi_zalak 1000 10000 0 1
+  409    266  mpirun -np 1 ./MDmpi_zalak 1000 10000 0 4
+  410    267  emacs MDmpi_zalak.cpp
+  411    268  emacs MDmpi_zalak.cpp
+  412    269  mpic++ MDmpi_zalak.cpp Timer.cpp -fopenmp -o MDmpi_zalak
+  413    270  rm coordinateOutput.txt
+  414    271  mpirun -np 1 ./MDmpi_zalak 1000 10000 100 1 >> coordinateOutput.txt
+  415    272  cat coordinateOutput.txt
+  416    273  emacs MDmpi_zalak
+  417    274  emacs MDmpi_zalak.cpp
+  418    275  rm coordinateOutput.txt
+  419    276  mpic++ MDmpi_zalak.cpp Timer.cpp -fopenmp -o MDmpi_zalak
+  420    277  mpirun -np 1 ./MDmpi_zalak 1000 10000 100 1 >> coordinateOutput.txt
+  421    278  mpdallexit
+  422    279  cd ../..
+  423    280  cd CSS534_Assignment4/Final_Before_optimization/
+  424    281  clear
+  425    282  stty -echo
+  426    283  ./md zalak Hazal1316 machinefile.txt 13611 4 1 1000 10000 0
+  427    284  who
+  428    285  cd CSS534_Assignment4/
+  429    286  cd final_working_Iteration1/
+  430    287  cd ..
+  431    288  cd Final_Before_optimization/
+  432    289  emacs machinefile.txt
+  433    290  ./killMprocess.sh
+  434    291  exit
+  435    292  cd CSS534_Assignment4/
+  436    293  cd Final_Before_optimization/
+  437    294  ./killMprocess.sh
+  438    295  cd ../..
+  439    296  cd css534_Assignment2/molecular_dynamics
+  440    297  mpdallexit
+  441    298  exit
+  442    299  cd CSS534_Assignment4/
+  443    300  cd Final_Before_optimization/
+  444    301  ./killMprocess.sh
+  445    302  cd ~
+  446    303  cd css534_Assignment2/molecular_dynamics
+  447    304  cat mpi_setup.txt
+  448    305  mpdboot -n 4 -v
+  449    306  clear
+  450    307  mpirun -np 4 ./MDmpi_zalak 1000 10000 0 4
+  451    308  mpirun -np 4 ./MDmpi_zalak 1000 10000 0 1
+  452    309  mpirun -np 1 ./MDmpi_zalak 1000 10000 0 4
+  453    310  mpirun -np 1 ./MDmpi_zalak 1000 10000 0 1
+  454    311  emacs mpd.hosts
+  455    312  clear
+  456    313  mpirun -np 4 ./MDmpi_zalak 1000 10000 0 4
+  457    314  mpdallexit
+  458    315  ssh uw1-320-00
+  459    316  cd CSS534_Assignment4/Final_Before_optimization/
+  460    317  ./killMprocess.sh
+  461    318  exit
+  462    319  mkdir FinalExams
+  463    320  cd FinalExams/
+  464    321  touch my_file.txt
+  465    322  emacs my_file.txt
+  466    323  emacs /net/metis/home2/zalak/css534_Assignment2/molecular_dynamics/compile.sh
+  467    324  ls
+  468    325  cat /net/metis/home2/zalak/css534_Assignment2/molecular_dynamics/compile.sh
+  469    326  g++ TwoPhaseIO.cpp -o two
+  470    327  emacs TwoPhaseIO.cpp
+  471    328  emacs TwoPhaseIO.cpp
+  472    329  g++ TwoPhaseIO.cpp -o two
+  473    330  cat TwoPhaseIO.cpp
+  474    331  emacs TwoPhaseIO.cpp
+  475    332  g++ TwoPhaseIO.cpp -o two
+  476    333  emacs TwoPhaseIO.cpp
+  477    334  g++ TwoPhaseIO.cpp -o two
+  478    335  emacs TwoPhaseIO.cpp
+  479    336  g++ TwoPhaseIO.cpp -o two
+  480    337  ls
+  481    338  rm TwoPhaseIO.cpp~
+  482    339  rm my_file.txt~
+  483    340  ./two my_file.txt
+  484    341  cat my_file.txt
+  485    342  g++ TwoPhaseIO.cpp -o two
+  486    343  g++ TwoPhaseIO.cpp -o two
+  487    344  ./two my_file.txt
+  488    345  g++ TwoPhaseIO.cpp -o two
+  489    346  ./two my_file.txt
+  490    347  g++ TwoPhaseIO.cpp -o two
+  491    348  ./two my_file.txt
+  492    349  cd css534_Assignment2/molecular_dynamics
+  493    350  ls
+  494    351  cp mpd.hosts ~/FinalExams/
+  495    352  cp MDArchive.zip ~/FinalExams/
+  496    353  cp mpi_setup.txt ~/FinalExams/
+  497    354  cd ~/FinalExams/
+  498    355  clear
+  499    356  ls
+  500    357  cp ~/css534_Assignment2/molecular_dynamics/compile.sh .
+  501  history
+  502  history > 1.txt

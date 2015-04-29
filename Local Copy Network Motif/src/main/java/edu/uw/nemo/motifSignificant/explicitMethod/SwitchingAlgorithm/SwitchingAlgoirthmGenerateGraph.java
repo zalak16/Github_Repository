@@ -52,7 +52,7 @@ public class SwitchingAlgoirthmGenerateGraph
         ConvertDataStructure convert = new ConvertDataStructure();
 
         Hashtable<Integer, HashSet<Integer>> randomGraphAdjacenyList = convert.convertToAdjacencyHashtable(this.inputGraph);
-      // convert.print(randomGraphAdjacenyList);
+       // convert.print(randomGraphAdjacenyList);
 
 
         List<String[]> randomEdgeList = new ArrayList<String[]>();
@@ -105,7 +105,7 @@ public class SwitchingAlgoirthmGenerateGraph
       //  convert.print(randomGraphAdjacenyList);
 
         AdjacencyMapping randomAdjMap = convert.convertToAdjacencyMapping(randomGraphAdjacenyList);
-      //  convert.print(randomAdjMap);
+       // convert.print(randomAdjMap);
         return (new Mapping(randomEdgeList, randomAdjMap));
     }
 
