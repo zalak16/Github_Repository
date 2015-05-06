@@ -5,6 +5,7 @@ import edu.uw.nemo.io.Parser;
 import edu.uw.nemo.labeler.GraphFormat;
 import edu.uw.nemo.labeler.GraphLabel;
 import edu.uw.nemo.model.Mapping;
+import edu.uw.nemo.motifSignificant.CalculateMotifSignificance;
 import edu.uw.nemo.motifSignificant.explicitMethod.NemoControllerRandomGraphs;
 import edu.uw.nemo.motifSignificant.explicitMethod.RandomGraphCanonicalLabelling;
 import edu.uw.nemo.motifSignificant.explicitMethod.SwitchingAlgorithm.SwitchingAlgoirthmGenerateGraph;
@@ -35,7 +36,7 @@ public class NemoController {
      * @param size The size of the sub-graphs to generate.
      * @return The map of all the canonically labeled sub-graphs of given size found.
      */
-    public Map<String, List<Map.Entry<String, Long>>> extract(String fileName, int size) {
+    public Map<String, List<Map.Entry<String, Long>>> extract(String fileName, int size, int totalRandomGraph, double probability) {
         // build Mapping with parser
         Mapping mapping = this.parseFile(fileName);
         
@@ -62,16 +63,22 @@ public class NemoController {
         // Map<String, List<Integer>> conc = calculator.standardConcentrations(canonicalSubgraphs);
         long startTime = System.currentTimeMillis();
         //this.randomGraphGenerationAlgorithm1(mapping, size);
-        ArrayList<RandomGraphCanonicalLabelling> randomGraphLabel=  this.randomGraphGeneration(mapping, size);
+        ArrayList<RandomGraphCanonicalLabelling> randomGraphLabel=  this.randomGraphGeneration(mapping, size, totalRandomGraph, probability);
 
         long endTime = System.currentTimeMillis();
+
         System.out.println("Time taken for Random graph: " + (endTime - startTime));
 
-
+        this.printSignificanceMotif(randomGraphLabel, canonicalSubgraphs, totalRandomGraph, size, probability);
 
         return canonicalSubgraphs;
     }
-    
+
+    private void printSignificanceMotif(ArrayList<RandomGraphCanonicalLabelling> randomGraphLabel,  Map<String, List<Map.Entry<String, Long>>> inputGraphLabel, int totalRandomGraph, int k, double prob)
+    {
+        CalculateMotifSignificance motifSignificance = new CalculateMotifSignificance();
+        motifSignificance.printSignificantMotif(randomGraphLabel, inputGraphLabel, prob, totalRandomGraph, k);
+    }
     private Mapping parseFile(String fileName)
     {
         Parser parser = new Parser();
@@ -89,10 +96,10 @@ public class NemoController {
         return mapping;
     }
 
-    private ArrayList<RandomGraphCanonicalLabelling>  randomGraphGeneration(Mapping inputMapping, int k)
+    private ArrayList<RandomGraphCanonicalLabelling>  randomGraphGeneration(Mapping inputMapping, int k, int totalRandomGraph, double prob)
     {
         NemoControllerRandomGraphs nemoRand = new NemoControllerRandomGraphs();
-        return nemoRand.randomGraphGenerationSwitchingAlgorithm(inputMapping, k);
+        return nemoRand.randomGraphGenerationSwitchingAlgorithm(inputMapping, k, totalRandomGraph, prob);
     }
 
     private void enumerateSubGraphs(Mapping mapping, GraphLabel label, int size) {

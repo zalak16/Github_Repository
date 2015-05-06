@@ -15,10 +15,9 @@ import java.util.Map;
  * Created by Zalak on 4/25/2015.
  */
 public class NemoControllerRandomGraphs {
-    private static final int nRandomGraph = 1;
-    private static final double probability = 0.5;
 
-     public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationSwitchingAlgorithm(Mapping mapping, int size)
+
+     public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationSwitchingAlgorithm(Mapping mapping, int size, int nRandomGraph, double probability)
      {
         SwitchingAlgoirthmGenerateGraph graphGenerator = new SwitchingAlgoirthmGenerateGraph(mapping);
         long start = System.currentTimeMillis();
@@ -52,7 +51,16 @@ public class NemoControllerRandomGraphs {
 
     }
 
-    public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationAlgorithm1(Mapping mapping, int size) {
+    /**
+     *
+     * @param mapping
+     * @param size
+     * @param nRandomGraph
+     * @param probability
+     * @return
+     */
+    public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationAlgorithm1(Mapping mapping, int size, int nRandomGraph, double probability)
+    {
         GenerateGraph graphGenerator = new GenerateGraph(mapping);
         List<Mapping> randomGraphList = graphGenerator.generateRandomGraph(nRandomGraph);
         ArrayList<RandomGraphCanonicalLabelling> canonicalSubgraphList = new ArrayList<RandomGraphCanonicalLabelling>();

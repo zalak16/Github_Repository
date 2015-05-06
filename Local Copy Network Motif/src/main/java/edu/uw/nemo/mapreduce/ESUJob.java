@@ -91,7 +91,8 @@ public class ESUJob {
      * @throws URISyntaxException 
      */
     public void run(String args[])
-            throws ClassNotFoundException, IOException, InterruptedException, URISyntaxException {
+            throws ClassNotFoundException, IOException, InterruptedException, URISyntaxException
+    {
         FileSystem fs = FileSystem.get(this.conf);
         
         // Create file to log information
@@ -100,7 +101,8 @@ public class ESUJob {
         if (!fs.exists(logFile)) {
             logFileStream = new PrintStream(fs.create(logFile, true), true, "UTF-8");
         }
-        else {
+        else
+        {
             BufferedReader olderLogStream = new BufferedReader(new InputStreamReader(fs.open(logFile)));
             LinkedList<String> oldData = new LinkedList<String>();
             String line = olderLogStream.readLine();

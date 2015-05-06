@@ -94,11 +94,11 @@ public class SwitchingAlgoirthmGenerateGraph
                 continue;
             }
 
-            if(i % 10000 == 0)
+            /*if(i % 10000 == 0)
             {
                 long endTime = System.currentTimeMillis();
                 System.out.println("\n" + i + " : " + (endTime - startTime));
-            }
+            }*/
         }
 
         System.out.print("\n *****************************************************************************************************\n");

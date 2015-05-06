@@ -127,14 +127,20 @@ public class EsuMapper extends Mapper<LongWritable, Text, Text, Text> {
         return neighbourhood;
     }
 
-    private static Mapping parseFile(String fileName) {
+    private static Mapping parseFile(String fileName)
+    {
         Parser parser = new Parser();
         Mapping _mapping = null;
-        try {
+        try
+        {
             _mapping = parser.parser(fileName);
-        } catch (IOException ioe) {
+        }
+        catch (IOException ioe)
+        {
             System.err.println("Exception while parsing file for mapping. " + ioe.getLocalizedMessage());
-        } catch (URISyntaxException urie) {
+        }
+        catch (URISyntaxException urie)
+        {
             System.err.println("Exception while parsing file for mapping. " + urie.getLocalizedMessage());
         }
 

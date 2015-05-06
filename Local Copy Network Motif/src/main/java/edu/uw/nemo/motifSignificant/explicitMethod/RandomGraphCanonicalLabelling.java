@@ -1,8 +1,11 @@
 package edu.uw.nemo.motifSignificant.explicitMethod;
 
 
+
 import edu.uw.nemo.model.Mapping;
 
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -11,14 +14,16 @@ import java.util.Map;
  */
 public class RandomGraphCanonicalLabelling {
 
-    Mapping map;
-    Map<String, List<Map.Entry<String, Long>>> canonicalSubgraphs;
+    public Mapping map;
+    public Map<String, List<Map.Entry<String, Long>>> canonicalSubgraphs;
+    public HashMap<String, Long> labelCountMapping;
 
 
     public RandomGraphCanonicalLabelling(Mapping map, Map<String, List<Map.Entry<String, Long>>> canonicalSubgraphs)
     {
         this.map = map;
         this.canonicalSubgraphs = canonicalSubgraphs;
+        labelCountMapping = new HashMap<String, Long>();
     }
 
 
