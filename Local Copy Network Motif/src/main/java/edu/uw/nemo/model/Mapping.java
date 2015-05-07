@@ -10,8 +10,15 @@ import java.util.*;
 public class Mapping {
 
     private final List<String[]> edgesList;
+
     private final AdjacencyMapping adjMapping;
-    
+
+
+    public AdjacencyMapping getAdjMapping() {
+        return adjMapping;
+    }
+
+
     /**
      * Constructs the {@link Mapping} object
      * @param edgesList The list of edges in the graph.
@@ -36,6 +43,23 @@ public class Mapping {
      */
     public int getLinkCount() {
         return edgesList != null ? edgesList.size() : 0;
+    }
+
+    /**
+     * Get the number of edges in the graph from adjacency mapping
+     * @return The number of edges
+     */
+    public int getTotalEdges(){
+        if(adjMapping != null)
+        {
+            int edgeCount = 0;
+            for(int i= 0; i< getNodeCount(); i++)
+            {
+                edgeCount += adjMapping.getNeighbours(i).size();
+            }
+            return (edgeCount/2);
+        }
+        return 0;
     }
 
     /**

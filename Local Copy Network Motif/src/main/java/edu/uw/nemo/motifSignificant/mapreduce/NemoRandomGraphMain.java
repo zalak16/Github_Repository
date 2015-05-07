@@ -4,8 +4,7 @@ package edu.uw.nemo.motifSignificant.mapreduce;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapred.*;
+
 
 
 /**
@@ -13,8 +12,7 @@ import org.apache.hadoop.mapred.*;
  */
 public class NemoRandomGraphMain
 {
-    public static void main(String args[]) throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException
-    {
+    public static void main(String args[]) throws IOException, InterruptedException, URISyntaxException, ClassNotFoundException {
         long startTime = System.currentTimeMillis();
 
         System.out.println(args.length);

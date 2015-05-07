@@ -70,7 +70,7 @@ public class GenerateGraph
         return random.nextInt(n);
     }
 
-    boolean checkEdgeExistence(AdjacencyMapping adjMapping, int toVertex, int fromVertex)
+    public boolean checkEdgeExistence(AdjacencyMapping adjMapping, int toVertex, int fromVertex)
     {
      //   System.out.println("\n" + toVertex + "," + fromVertex + "," + adjMapping.size());
         if(!(toVertex >= adjMapping.size() || fromVertex >= adjMapping.size()))

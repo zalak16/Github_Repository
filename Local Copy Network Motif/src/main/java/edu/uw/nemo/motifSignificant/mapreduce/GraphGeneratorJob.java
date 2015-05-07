@@ -3,7 +3,7 @@ package edu.uw.nemo.motifSignificant.mapreduce;
 import edu.uw.nemo.io.Parser;
 import edu.uw.nemo.model.Mapping;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
+
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -48,6 +48,7 @@ public class GraphGeneratorJob
     {
         FileSystem fs = FileSystem.get(this.conf);
 
+        // All folder and files are getting created at path /user/zalak/
         //Create File to log information
         Path logFile = new Path(args[1], "RandomGraphGenerator.log");
         PrintStream logFileStream = new PrintStream(fs.create(logFile, true), true, "UTF-8");
@@ -61,7 +62,7 @@ public class GraphGeneratorJob
 
         startTime = System.currentTimeMillis();
         //Create new file containing nuber of graphs to be created and  set it as input
-        Path inputFilePath = new Path("/RandomGraphGenerator" ,"numberRandomGraphs.txt");
+        Path inputFilePath = new Path("RandomGraphGenerator" ,"numberRandomGraphs.txt");
         FSDataOutputStream fileOutputStream = fs.create(inputFilePath, true);
         PrintStream fileWriter = null;
 
@@ -128,7 +129,7 @@ public class GraphGeneratorJob
         job.setMapperClass(SwitchingAlgorithmGenerateGraphMapper.class);
         job.setReducerClass(SwitchingAlgorithmGenerateGraphReducer.class);
 
-       job.addCacheFile(new URI(args[0] + "#" + "mapper file"));
+       job.addCacheFile(new URI(args[0] + "#" + "mapperfile"));
 
         return job;
 

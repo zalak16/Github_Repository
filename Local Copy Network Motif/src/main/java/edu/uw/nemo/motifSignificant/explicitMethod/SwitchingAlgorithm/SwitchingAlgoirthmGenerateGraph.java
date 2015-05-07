@@ -23,6 +23,11 @@ public class SwitchingAlgoirthmGenerateGraph
         this.inputGraph = inputGraph;
     }
 
+    public SwitchingAlgoirthmGenerateGraph()
+    {
+
+    }
+
     /**
      *
      * @param n
@@ -254,21 +259,24 @@ public class SwitchingAlgoirthmGenerateGraph
      */
     boolean swap(int[] vertex_edge1, int[] vertex_edge2,Hashtable<Integer, HashSet<Integer>> adjList, long i)
     {
-
+        boolean flag = true;
         if(i % 2 == 0)
         {
             if(checkEdgeExistence(new int[] {vertex_edge1[0],  vertex_edge2[0]}, adjList ))
             {
-                return false;
+                flag = false;
             }
             if(checkEdgeExistence(new int[] {vertex_edge1[1],  vertex_edge2[1]}, adjList ))
             {
-                return false;
+                flag = false;
             }
-            addEdges(adjList, vertex_edge1[0], vertex_edge2[0]);
-            addEdges(adjList, vertex_edge1[1], vertex_edge2[1]);
+            if(flag)
+            {
+                addEdges(adjList, vertex_edge1[0], vertex_edge2[0]);
+                addEdges(adjList, vertex_edge1[1], vertex_edge2[1]);
+            }
         }
-        else
+        else if(!flag)
         {
             if(checkEdgeExistence(new int[] {vertex_edge1[0],  vertex_edge2[1]}, adjList))
             {
