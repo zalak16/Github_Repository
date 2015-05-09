@@ -19,7 +19,7 @@ public class GenerateGraphTest {
     private static final String FileName= "InputGraph2.csv";
 
     @Test
-    public void testNodecountAndEdgeCount() throws Exception
+    public void testPreserveNodecountAndEdgeCount() throws Exception
     {
         Parser parser = new Parser();
         Mapping inputMapping = parser.parser(FileName);

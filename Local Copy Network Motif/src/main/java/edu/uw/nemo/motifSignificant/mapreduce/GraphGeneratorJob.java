@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 
+
 /**
  * Created by Zalak on 5/5/2015.
  */
@@ -27,6 +28,7 @@ public class GraphGeneratorJob
 {
     public static Mapping mapping;
     private Configuration conf;
+
 
     /**
      *
@@ -50,7 +52,7 @@ public class GraphGeneratorJob
 
         // All folder and files are getting created at path /user/zalak/
         //Create File to log information
-        Path logFile = new Path(args[1], "RandomGraphGenerator.log");
+        Path logFile = new Path(args[5], "RandomGraphGenerator.log");
         PrintStream logFileStream = new PrintStream(fs.create(logFile, true), true, "UTF-8");
 
         //Parse biological network file to create mapping object
@@ -74,7 +76,7 @@ public class GraphGeneratorJob
            fileWriter = new PrintStream(fileOutputStream, true, "UTF-8");
             for(int i= 0; i< NRandomGraph; i++)
             {
-                 fileWriter.println(1);
+                 fileWriter.println((i+1));
             }
         }
         catch(IOException ex)
@@ -123,7 +125,9 @@ public class GraphGeneratorJob
 
         //Specifies Output key and value type for Map and Reduce class.
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+     //   job.setMapOutputValueClass(Object.class);
+       job.setOutputValueClass(Text.class);
+
 
         //Sets Mapper and Reducer class.
         job.setMapperClass(SwitchingAlgorithmGenerateGraphMapper.class);

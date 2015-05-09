@@ -260,15 +260,17 @@ public class SwitchingAlgoirthmGenerateGraph
     boolean swap(int[] vertex_edge1, int[] vertex_edge2,Hashtable<Integer, HashSet<Integer>> adjList, long i)
     {
         boolean flag = true;
-        if(i % 2 == 0)
+        if(flag)
         {
             if(checkEdgeExistence(new int[] {vertex_edge1[0],  vertex_edge2[0]}, adjList ))
             {
                 flag = false;
+                //return false;
             }
             if(checkEdgeExistence(new int[] {vertex_edge1[1],  vertex_edge2[1]}, adjList ))
             {
                 flag = false;
+                //return false;
             }
             if(flag)
             {
@@ -276,7 +278,7 @@ public class SwitchingAlgoirthmGenerateGraph
                 addEdges(adjList, vertex_edge1[1], vertex_edge2[1]);
             }
         }
-        else if(!flag)
+        if(!flag)
         {
             if(checkEdgeExistence(new int[] {vertex_edge1[0],  vertex_edge2[1]}, adjList))
             {
@@ -286,11 +288,18 @@ public class SwitchingAlgoirthmGenerateGraph
             {
                 return false;
             }
-            addEdges(adjList, vertex_edge1[0], vertex_edge2[1]);
-            addEdges(adjList, vertex_edge1[1], vertex_edge2[0]);
+            flag = true;
+            if(flag)
+            {
+                addEdges(adjList, vertex_edge1[0], vertex_edge2[1]);
+                addEdges(adjList, vertex_edge1[1], vertex_edge2[0]);
+            }
         }
-        deleteEdges(adjList, vertex_edge1[0], vertex_edge1[1]);
-        deleteEdges(adjList, vertex_edge2[0], vertex_edge2[1]);
+        if(flag)
+        {
+            deleteEdges(adjList, vertex_edge1[0], vertex_edge1[1]);
+            deleteEdges(adjList, vertex_edge2[0], vertex_edge2[1]);
+        }
 
         return true;
     }
@@ -305,6 +314,7 @@ public class SwitchingAlgoirthmGenerateGraph
     {
         HashSet<Integer> set1 = null;
         HashSet<Integer> set2 = null;
+
         if(adjList.containsKey(to))
         {
            set1 = adjList.get(to);

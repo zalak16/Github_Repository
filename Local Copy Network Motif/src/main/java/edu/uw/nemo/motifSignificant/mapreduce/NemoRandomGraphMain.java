@@ -21,6 +21,7 @@ public class NemoRandomGraphMain
         String totalRandomGraph = args[2];
         String probability = args[3];
         String jarFileName = args[4];
+        String logDir = args[5];
 
         for(int i= 0; i< args.length; i++)
         {
@@ -29,12 +30,13 @@ public class NemoRandomGraphMain
 
 
         GraphGeneratorJob graphGeneratorJob = new GraphGeneratorJob();
-        String jobArgs[] = new String[5];
+        String jobArgs[] = new String[args.length];
         jobArgs[0] = biologicalNetworkFile;
         jobArgs[1]= outputFile;
         jobArgs[2] = totalRandomGraph;
         jobArgs[3]= probability;
         jobArgs[4]= jarFileName;
+        jobArgs[5] = logDir;
         graphGeneratorJob.run(jobArgs);
 
 

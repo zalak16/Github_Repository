@@ -10,7 +10,7 @@ import java.util.*;
  * Created by Zalak on 4/8/2015.
  */
 public class ConvertDataStructure {
-    public Hashtable<Integer, HashSet<Integer>> convertToAdjacencyHashtable(Mapping inputGraph) {
+   Hashtable<Integer, HashSet<Integer>> convertToAdjacencyHashtable(Mapping inputGraph) {
         Hashtable<Integer, HashSet<Integer>> adjacentListTable = new Hashtable<Integer, HashSet<Integer>>();
         HashSet<Integer> adjSet = null;
         for (int i = 0; i < inputGraph.getNodeCount(); i++) {
@@ -40,7 +40,7 @@ public class ConvertDataStructure {
      * @param adjHashTable
      * @return
      */
-    public AdjacencyMapping convertToAdjacencyMapping(Hashtable<Integer, HashSet<Integer>> adjHashTable) {
+    AdjacencyMapping convertToAdjacencyMapping(Hashtable<Integer, HashSet<Integer>> adjHashTable) {
         AdjacencyMapping map = new AdjacencyMapping(adjHashTable.size());
         for (Integer key : adjHashTable.keySet()) {
             HashSet<Integer> set = adjHashTable.get(key);
@@ -76,7 +76,7 @@ public class ConvertDataStructure {
      *
      * @param adjList
      */
-    public void print(Hashtable<Integer, HashSet<Integer>> adjList) {
+    void print(Hashtable<Integer, HashSet<Integer>> adjList) {
         for (Integer key : adjList.keySet()) {
             HashSet<Integer> set = adjList.get(key);
             System.out.print("\n" + key);
@@ -90,7 +90,7 @@ public class ConvertDataStructure {
      *
      * @param map
      */
-    public void print(AdjacencyMapping map) {
+    void print(AdjacencyMapping map) {
         System.out.println("\n" + "--------------------------------------------------------------------------\n");
         for (int i = 0; i < map.size(); i++) {
             List<AdjacentVertexWithEdge> adjList = map.getNeighbours(i);

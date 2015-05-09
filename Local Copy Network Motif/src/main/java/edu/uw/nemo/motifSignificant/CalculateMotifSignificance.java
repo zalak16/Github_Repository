@@ -57,7 +57,7 @@ public class CalculateMotifSignificance
             print(randomGraphLabel.labelCountMapping);
         }
 
-        if(totalRandomGraph >= 6)
+        if(totalRandomGraph >= 100)
         {
               calculatePValue(randomGraphLabelList, inputGraphLabelCount, totalRandomGraph, k);
         }
