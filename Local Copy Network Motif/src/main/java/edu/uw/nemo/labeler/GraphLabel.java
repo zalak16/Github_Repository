@@ -34,9 +34,11 @@ public class GraphLabel {
     
     // input file for labelg.exe containing graphs in g6 format
     private final static String LabelGInputFile = "InputGraphs.g6";
+
     
     // output file for labelg.exe containing canonical labels
-    private final static String LabelGOutputFile = "OutputGraphs.g6";    
+    private final static String LabelGOutputFile = "OutputGraphs.g6";
+
     
     /**
      * Constructs an instance of GraphLabel with option to save the generated sub-graphs
@@ -57,7 +59,8 @@ public class GraphLabel {
             this.enumeratedGraphsWriter = null;
         }
     }
-    
+
+
     /**
      * Close the BufferedWriter used for saving subgraphs.
      */
@@ -194,13 +197,41 @@ public class GraphLabel {
         
         return canonicalLabels;
     }
+
+    /**
+     * Computes the canonical label for all the sub-graphs that it currently holds.
+     * The list of original graphs, after aggregation, is the value of the map entry.
+     * Thus it aggregate all canonical sub-graphs together.
+     * @return The map from canonically labeled sub-graph to a list of all the representative sub-graphs for that canonical label with the frequency of occurrence.
+     */
+    public Map<String, List<Map.Entry<String, Long>>> getCanonicalLabels(String labelFileName) {
+        // (final output) canonicalLabels maps each canonical label to graphs in graph6 format.
+        Map<String, List<Map.Entry<String, Long>>> canonicalLabels = new HashMap<String, List<Map.Entry<String, Long>>>();
+        // (intermediate output) maps graph6 string to canonical string obtained from labelg.exe
+        Map<String, String> graphWithCanonicalLabels = generateCanonicalLabels(labelFileName, this.subGraphs.keySet());
+
+        for (Map.Entry<String, Long> subGraph : this.subGraphs.entrySet()) {
+            String canonicalLabel = graphWithCanonicalLabels.get(subGraph.getKey());
+            List<Map.Entry<String, Long>> canonicalGraphs = canonicalLabels.get(canonicalLabel);
+            if (canonicalGraphs == null) {
+                canonicalGraphs = new ArrayList<Map.Entry<String, Long>>();
+                canonicalLabels.put(canonicalLabel, canonicalGraphs);
+            }
+
+            canonicalGraphs.add(subGraph);
+        }
+
+        return canonicalLabels;
+    }
     
-    private static Map<String, String> generateCanonicalLabels(String labelgPath, Set<String> graphLabels) {
+    private static Map<String, String> generateCanonicalLabels(String labelgPath, Set<String> graphLabels)
+    {
         System.out.println("Total number of unique sub-graphs for which canonical labels need to be computed: " + graphLabels.size());
         // Create a file with all the entries from graphLabels, one at each line.
         BufferedWriter graphWriter = null;
         try {
             graphWriter = new BufferedWriter(new FileWriter(LabelGInputFile));
+            System.out.println("LabelG Input file created");
             for (String graphLabel : graphLabels) {
                 graphWriter.write(graphLabel);
                 graphWriter.write('\n');
@@ -228,6 +259,7 @@ public class GraphLabel {
             Process labelg = Runtime.getRuntime().exec(args);
             
             OutputStream out = labelg.getOutputStream();
+
             out.close();
             
             BufferedReader inStr = new BufferedReader(new java.io.InputStreamReader(labelg.getInputStream()));

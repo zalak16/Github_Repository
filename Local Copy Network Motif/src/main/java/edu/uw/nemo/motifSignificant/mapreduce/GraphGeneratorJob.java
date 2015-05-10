@@ -7,8 +7,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 
+import org.apache.hadoop.io.TwoDArrayWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -28,6 +30,8 @@ public class GraphGeneratorJob
 {
     public static Mapping mapping;
     private Configuration conf;
+    public static double probability;
+    public static int size;
 
 
     /**
@@ -50,6 +54,9 @@ public class GraphGeneratorJob
     {
         FileSystem fs = FileSystem.get(this.conf);
 
+        this.probability = Double.parseDouble(args[3]);
+        this.size = Integer.parseInt(args[6]);
+
         // All folder and files are getting created at path /user/zalak/
         //Create File to log information
         Path logFile = new Path(args[5], "RandomGraphGenerator.log");
@@ -57,13 +64,16 @@ public class GraphGeneratorJob
 
         //Parse biological network file to create mapping object
         long startTime = System.currentTimeMillis();
+
         Path biologicalNetworkFilePath = new Path(args[0]);
         this.mapping = parseFile(fs.open(biologicalNetworkFilePath));
+
         long endTime = System.currentTimeMillis();
         logFileStream.println("Parsing graph file took " + (endTime - startTime) + "ms.");
 
-        startTime = System.currentTimeMillis();
         //Create new file containing nuber of graphs to be created and  set it as input
+        startTime = System.currentTimeMillis();
+
         Path inputFilePath = new Path("RandomGraphGenerator" ,"numberRandomGraphs.txt");
         FSDataOutputStream fileOutputStream = fs.create(inputFilePath, true);
         PrintStream fileWriter = null;
@@ -125,7 +135,8 @@ public class GraphGeneratorJob
 
         //Specifies Output key and value type for Map and Reduce class.
         job.setOutputKeyClass(Text.class);
-     //   job.setMapOutputValueClass(Object.class);
+       // job.setMapOutputValueClass(MappingObject.class);
+       job.setMapOutputValueClass(IntegerTwoDArrayWritable.class);
        job.setOutputValueClass(Text.class);
 
 

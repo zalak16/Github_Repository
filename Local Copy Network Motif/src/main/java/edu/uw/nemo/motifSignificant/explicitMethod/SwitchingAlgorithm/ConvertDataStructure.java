@@ -44,19 +44,23 @@ public class ConvertDataStructure {
         AdjacencyMapping map = new AdjacencyMapping(adjHashTable.size());
         for (Integer key : adjHashTable.keySet()) {
             HashSet<Integer> set = adjHashTable.get(key);
-            for (Iterator iter = set.iterator(); iter.hasNext(); ) {
+            for (Iterator iter = set.iterator(); iter.hasNext(); )
+            {
                 int adjNode = (Integer) iter.next();
-                if (map.size() == 0) {
+                if (map.size() == 0)
+                {
                     map.addAdjacentVertices(key, adjNode);
                     continue;
                 }
-                if (map.size() >= key) {
+                if (map.size() >= key)
+                {
                     if (map.getNeighbour(key, adjNode) == null) {
                         map.addAdjacentVertices(key, adjNode);
                         continue;
                     }
                 }
-                if (map.size() >= adjNode) {
+                if (map.size() >= adjNode)
+                {
                     if (map.getNeighbour(adjNode, key) == null) {
                         map.addAdjacentVertices(adjNode, key);
                         continue;
