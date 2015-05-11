@@ -4,10 +4,7 @@ import edu.uw.nemo.model.AdjacencyMapping;
 import edu.uw.nemo.model.AdjacentVertexWithEdge;
 import edu.uw.nemo.model.Mapping;
 import edu.uw.nemo.motifSignificant.explicitMethod.SwitchingAlgorithm.SwitchingAlgoirthmGenerateGraph;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.TwoDArrayWritable;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Mapper;
 
 
@@ -24,7 +21,15 @@ import java.util.List;
 public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, Text, Text, IntegerTwoDArrayWritable>
 {
    static Mapping inputMapping = null;
+    BooleanWritable one = new BooleanWritable(true);
+    BooleanWritable zero = new BooleanWritable(false);
+    //IntWritable[][] adjMatrix = new IntWritable[5132][5132];
+    BooleanWritable[][] adjMatrix = new BooleanWritable[3825][3825];
+    //BooleanWritable[][] adjMatrixOut = new BooleanWritable[4000][4000];
+    Boolean arrayCreated = false;
+
     protected void setup(Context context) throws IOException, InterruptedException {
+
         if(GraphGeneratorJob.mapping == null)
         {
             System.out.println("Input file is invalid");
@@ -33,6 +38,7 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
         else
         {
             inputMapping = GraphGeneratorJob.mapping;
+
         }
         super.setup(context);
 
@@ -46,44 +52,58 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
      //   print(randomGraph.getAdjMapping());
 
         System.out.println("Calling Context.write");
-        IntWritable[][] adjMatrix = convertAdjMappingToMatrix(randomGraph);
-        //myarray[0][0] = new IntWritable(0);
-        //myarray[1][0] = new IntWritable(1);
+        BooleanWritable[][] adjMatrix1 = convertAdjMappingToMatrix(randomGraph);
+       //BooleanWritable[][] adjMatrix1 = CreateTmpArray();
+
 
         IntegerTwoDArrayWritable twoDArray = new IntegerTwoDArrayWritable();
-        twoDArray.set(adjMatrix);
+        if(twoDArray == null)
+        {
+            System.out.println("Two d Array is null ");
+        }
+        twoDArray.set(adjMatrix1);
 
 
        context.write(new Text(outputKey), twoDArray);
-      //  System.out.println("Called Context.write");
+        System.out.println("Called Context.write");
     }
 
 
-    IntWritable[][] convertAdjMappingToMatrix(Mapping map)
+    BooleanWritable[][] convertAdjMappingToMatrix(Mapping map)
     {
         AdjacencyMapping adjMap = map.getAdjMapping();
-        IntWritable[][] adjMatrix= new IntWritable[map.getNodeCount()][map.getNodeCount()];
 
         for(int i =0; i < map.getNodeCount(); i++)
         {
             for(int j = 0; j < map.getNodeCount(); j++)
             {
-                adjMatrix[i][j] = new IntWritable(0);
+                this.adjMatrix[i][j] = this.zero;
             }
-        }
 
-        for(int i =0; i < adjMap.size(); i++)
-        {
             List<AdjacentVertexWithEdge> vertexList = adjMap.getNeighbours(i);
             for(AdjacentVertexWithEdge  v : vertexList)
             {
-                adjMatrix[i][v.getNodeId()] = new IntWritable(1);
+             //   System.out.println(i + " : " + v.getNodeId());
+                this.adjMatrix[i][v.getNodeId()] = this.one;
             }
         }
-
-        return adjMatrix;
+        return this.adjMatrix;
     }
 
+/*    public BooleanWritable[][] CreateTmpArray()
+    {
+        if(arrayCreated == false) {
+            for (int i = 0; i < 4000; i++) {
+                for (int j = 0; j < 4000; j++) {
+                    adjMatrixOut[i][j] = this.one;
+                }
+            }
+            //arrayCreated = true;
+        }
+
+
+        return this.adjMatrixOut;
+    }*/
     /**
      *
      * @param map

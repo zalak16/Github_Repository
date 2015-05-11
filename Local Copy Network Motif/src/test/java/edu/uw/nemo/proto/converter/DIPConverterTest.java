@@ -20,7 +20,7 @@ public class DIPConverterTest {
     public void assertConverterHandlesMultipleLinksCorrectly() throws IOException, URISyntaxException {
         DIPConverter target = new DIPConverter();
 
-        int count = target.convert("full_scere_20140427.txt","InputGraph1.csv");
+        int count = target.convert("Scere20140427.txt","InputGraph8.csv");
 
        // int count = target.convert("InputGraph1.csv", "InputGraph1.txt");
         //assertEquals(22735, count);
