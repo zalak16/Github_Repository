@@ -62,7 +62,7 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
         Mapping randomGraph = graphGenerator.generateGraph();
 
         System.out.println("Mapping " + outputKey);
-        print(randomGraph.getAdjMapping());
+      //  print(randomGraph.getAdjMapping());
 
         System.out.println("Calling Context.write");
         BooleanWritable[][] adjMatrix1 = convertAdjMappingToMatrix(randomGraph);
@@ -78,7 +78,7 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
 
 
         context.write(new Text(outputKey), twoDArray);
-        System.out.println("Called Context.write");
+     //   System.out.println("Called Context.write");
     }
 
 

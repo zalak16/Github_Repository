@@ -113,6 +113,7 @@ public class SubgraphConcentration
        {
             double mean = calculateMean(randomGraphLabelList, inputGraph.getKey(), N);
             double stdDeviation = calculateStandardDeviation(randomGraphLabelList, inputGraph.getKey(), mean, N);
+          // System.out.println(mean + " : " + stdDeviation);
 
             double difference = inputGraph.getValue() - mean;
            double zscore;
@@ -123,7 +124,9 @@ public class SubgraphConcentration
            {
                zscore = 0;
            }
+        //   System.out.println(zscore);
 
+            System.out.println("Mean Subgraph Concentration: " + inputGraph.getKey() + " : " + mean);
             labelZscore.put(inputGraph.getKey(), zscore);
         }
 
@@ -148,14 +151,17 @@ public class SubgraphConcentration
             if(randomGraphLabel.labelSubgraphConcentration.containsKey(motif))
             {
                 double difference = randomGraphLabel.labelSubgraphConcentration.get(motif) - mean;
+                double pow = Math.pow(difference,2);
                 x +=  Math.pow(difference, 2);
+                //System.out.println("difference is " + difference + "power is " + pow + "x is " + x);
             }
         }
         double variance = (double)(x)/(double)(N);
+        //System.out.println("variance: " + variance);
         double sqrt = Math.sqrt(variance);
+        //System.out.println("sqrt: " + sqrt);
 
-        DecimalFormat df = new DecimalFormat("#.###");
-        return Double.valueOf(df.format(sqrt));
+       return sqrt;
 
     }
 

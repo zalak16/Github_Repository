@@ -37,6 +37,7 @@ public class GraphLabel {
 
     
     // output file for labelg.exe containing canonical labels
+   // private final static String LabelGOutputFile = "./OutputGraphs.g6";
     private final static String LabelGOutputFile = "OutputGraphs.g6";
 
     
@@ -231,6 +232,7 @@ public class GraphLabel {
         BufferedWriter graphWriter = null;
         try {
             graphWriter = new BufferedWriter(new FileWriter(LabelGInputFile));
+
             System.out.println("LabelG Input file created");
             for (String graphLabel : graphLabels) {
                 graphWriter.write(graphLabel);
@@ -257,11 +259,11 @@ public class GraphLabel {
         try {
             String[] args = {labelgPath, "-i3", "-I1:100", LabelGInputFile, LabelGOutputFile};
             Process labelg = Runtime.getRuntime().exec(args);
-            
+
             OutputStream out = labelg.getOutputStream();
 
             out.close();
-            
+
             BufferedReader inStr = new BufferedReader(new java.io.InputStreamReader(labelg.getInputStream()));
             String line = inStr.readLine();
             while (line != null) {
@@ -297,8 +299,10 @@ public class GraphLabel {
         try {
             canonicalLabelReader = new BufferedReader(new FileReader(LabelGOutputFile));
             Iterator<String> itr = graphLabels.iterator();
+
             String label = canonicalLabelReader.readLine();
-            while (label != null) {
+            while (label != null)
+            {
                 canonicalLabels.put(itr.next(), label);
                 label = canonicalLabelReader.readLine();
             }

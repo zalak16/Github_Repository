@@ -40,7 +40,7 @@ public class NemoController {
     public Map<String, List<Map.Entry<String, Long>>> extract(String fileName, int size, int totalRandomGraph, double probability) {
         // build Mapping with parser
         Mapping mapping = this.parseFile(fileName);
-        
+        System.out.println("#Nodes: " + mapping.getNodeCount() + " #Edges: " + mapping.getLinkCount());
         // generate motifs with ESUGen for the input subgraph size
         GraphLabel label = new GraphLabel(false);
         this.enumerateSubGraphs(mapping, label, size);
@@ -68,7 +68,7 @@ public class NemoController {
 
         long endTime = System.currentTimeMillis();
 
-        System.out.println("Time taken for Random graph: " + (endTime - startTime));
+        System.out.println("zTime taken for " + totalRandomGraph + " Random graph: " + (endTime - startTime));
 
         this.printSignificanceMotif(randomGraphLabel, canonicalSubgraphs, totalRandomGraph, size, probability);
 
