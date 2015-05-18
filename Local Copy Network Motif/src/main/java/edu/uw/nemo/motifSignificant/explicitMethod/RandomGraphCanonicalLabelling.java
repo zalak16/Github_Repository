@@ -17,13 +17,15 @@ public class RandomGraphCanonicalLabelling {
     public Mapping map;
     public Map<String, List<Map.Entry<String, Long>>> canonicalSubgraphs;
     public HashMap<String, Long> labelCountMapping;
+    public HashMap<String, Double>labelSubgraphConcentration;
 
 
     public RandomGraphCanonicalLabelling(Mapping map, Map<String, List<Map.Entry<String, Long>>> canonicalSubgraphs)
     {
         this.map = map;
         this.canonicalSubgraphs = canonicalSubgraphs;
-        labelCountMapping = new HashMap<String, Long>();
+        this.labelCountMapping = new HashMap<String, Long>();
+        this.labelSubgraphConcentration = new HashMap<String, Double>();
     }
 
 

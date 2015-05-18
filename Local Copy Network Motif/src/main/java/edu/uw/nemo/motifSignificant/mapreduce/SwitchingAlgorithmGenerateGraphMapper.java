@@ -11,21 +11,23 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.InetAddress;
 import java.util.List;
 
 
 /**
  * Created by Zalak on 5/4/2015.
  */
-public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, Text, Text, IntegerTwoDArrayWritable>
+public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, Text, Text, BooleanTwoDArrayWritable>
 {
    static Mapping inputMapping = null;
+   static int networkSize = GraphGeneratorJob.networkSize;
     BooleanWritable one = new BooleanWritable(true);
     BooleanWritable zero = new BooleanWritable(false);
-    //IntWritable[][] adjMatrix = new IntWritable[5132][5132];
-    BooleanWritable[][] adjMatrix = new BooleanWritable[3825][3825];
-    //BooleanWritable[][] adjMatrixOut = new BooleanWritable[4000][4000];
+
+
+    BooleanWritable[][] adjMatrix = new BooleanWritable[this.networkSize][this.networkSize];
+
     Boolean arrayCreated = false;
 
     protected void setup(Context context) throws IOException, InterruptedException {
@@ -38,25 +40,36 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
         else
         {
             inputMapping = GraphGeneratorJob.mapping;
+            System.out.println("Status : " + context.getStatus());
+            System.out.println("Input Split: " + context.getInputSplit());
+            System.out.println("Job Id: " + context.getJobID());
+            System.out.println("Job Name: " + context.getJobName());
+
 
         }
         super.setup(context);
 
     }
-    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
+    {
+        InetAddress iAddress = InetAddress.getLocalHost();
+        String currentIP = iAddress.getHostAddress();
+        System.out.println("Current IP AddressL:  " + currentIP );
+
+
         String outputKey = "RandomGraph#" + value.toString();
         SwitchingAlgoirthmGenerateGraph graphGenerator = new SwitchingAlgoirthmGenerateGraph(this.inputMapping);
         Mapping randomGraph = graphGenerator.generateGraph();
 
         System.out.println("Mapping " + outputKey);
-     //   print(randomGraph.getAdjMapping());
+        print(randomGraph.getAdjMapping());
 
         System.out.println("Calling Context.write");
         BooleanWritable[][] adjMatrix1 = convertAdjMappingToMatrix(randomGraph);
-       //BooleanWritable[][] adjMatrix1 = CreateTmpArray();
 
 
-        IntegerTwoDArrayWritable twoDArray = new IntegerTwoDArrayWritable();
+
+        BooleanTwoDArrayWritable twoDArray = new BooleanTwoDArrayWritable();
         if(twoDArray == null)
         {
             System.out.println("Two d Array is null ");
@@ -64,7 +77,7 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
         twoDArray.set(adjMatrix1);
 
 
-       context.write(new Text(outputKey), twoDArray);
+        context.write(new Text(outputKey), twoDArray);
         System.out.println("Called Context.write");
     }
 
@@ -90,26 +103,13 @@ public class SwitchingAlgorithmGenerateGraphMapper extends Mapper<LongWritable, 
         return this.adjMatrix;
     }
 
-/*    public BooleanWritable[][] CreateTmpArray()
-    {
-        if(arrayCreated == false) {
-            for (int i = 0; i < 4000; i++) {
-                for (int j = 0; j < 4000; j++) {
-                    adjMatrixOut[i][j] = this.one;
-                }
-            }
-            //arrayCreated = true;
-        }
 
-
-        return this.adjMatrixOut;
-    }*/
     /**
      *
      * @param map
      */
     private void print(AdjacencyMapping map) {
-        System.out.println("\n" + "--------------------------------------------------------------------------\n");
+        System.out.println("\n" + "----------------------------------Mapper----------------------------------------\n");
         for (int i = 0; i < map.size(); i++) {
             List<AdjacentVertexWithEdge> adjList = map.getNeighbours(i);
             System.out.print("\n" + i);

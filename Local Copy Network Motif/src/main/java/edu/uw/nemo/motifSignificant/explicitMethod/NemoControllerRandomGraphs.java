@@ -69,6 +69,11 @@ public class NemoControllerRandomGraphs {
 
         for (Mapping graph : randomGraphList) {
             System.out.println("############# Random Graph " + count + "####################");
+            if(count == 0 || count == 100 || count == 500 || count == 400 || count ==800 || count == 1000) {
+                long end = System.currentTimeMillis();
+                System.out.println("Time taken to enumerate subgraph for random graph  " + (count) + " is: " + (end - start));
+            }
+
             GraphLabel label = new GraphLabel(false);
             this.enumerateSubGraphs(graph, label, size, probability);
             System.out.println("Number of subgraphs enumerated: " + label.getSubgraphCount());
@@ -78,13 +83,13 @@ public class NemoControllerRandomGraphs {
             System.out.println("Number of canonical labels for all enumerated subgraphs: " + canonicalSubgraphs.size());
             canonicalSubgraphList.add(new RandomGraphCanonicalLabelling(graph, canonicalSubgraphs));
 
-            for (Map.Entry<String, List<Map.Entry<String, Long>>> e : canonicalSubgraphs.entrySet()) {
-                System.out.println("Cannonical Label (g6) \"" + e.getKey() + "\" has following Sub Graphs:");
-                Map<String, Long> subGraphCounts = GraphFormat.countDistinctGraphs(e.getValue());
-                for (Map.Entry<String, Long> c : subGraphCounts.entrySet()) {
-                    System.out.println("\tSubGraph (g6) \"" + c.getKey() + "\" has count: " + c.getValue());
-                }
-            }
+//            for (Map.Entry<String, List<Map.Entry<String, Long>>> e : canonicalSubgraphs.entrySet()) {
+//                System.out.println("Cannonical Label (g6) \"" + e.getKey() + "\" has following Sub Graphs:");
+//                Map<String, Long> subGraphCounts = GraphFormat.countDistinctGraphs(e.getValue());
+//                for (Map.Entry<String, Long> c : subGraphCounts.entrySet()) {
+//                    System.out.println("\tSubGraph (g6) \"" + c.getKey() + "\" has count: " + c.getValue());
+//                }
+//            }
             count++;
         }
         return canonicalSubgraphList;

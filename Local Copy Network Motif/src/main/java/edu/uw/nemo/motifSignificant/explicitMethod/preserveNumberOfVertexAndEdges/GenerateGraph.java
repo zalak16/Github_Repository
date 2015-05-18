@@ -52,10 +52,17 @@ public class GenerateGraph
       //  randomGraphList.add(inputMapping);
       //  print(randomGraphList);
         //randomGraphList.clear();
+        long start= System.currentTimeMillis();
         for(int i =0 ; i<n; i++)
         {
+
             Mapping map = generateRandomGraph();
             randomGraphList.add(map);
+            if(i == 0 || i == 100 || i == 500 || i == 400 || i ==800 || i == 1000)
+            {
+                long end = System.currentTimeMillis();
+                System.out.println("Time taken to generate " + (i+1) + " random graphs is: " + (end - start));
+            }
         }
         System.out.println("Random Graph");
     //    print(randomGraphList);

@@ -1,12 +1,11 @@
 package edu.uw.nemo.motifSignificant.mapreduce;
 
 import edu.uw.nemo.esu.ESUGen;
-import edu.uw.nemo.labeler.GraphFormat;
 import edu.uw.nemo.labeler.GraphLabel;
 import edu.uw.nemo.model.AdjacencyMapping;
 import edu.uw.nemo.model.AdjacentVertexWithEdge;
 import edu.uw.nemo.model.Mapping;
-import edu.uw.nemo.motifSignificant.explicitMethod.RandomGraphCanonicalLabelling;
+import org.apache.hadoop.io.BooleanWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
@@ -16,13 +15,12 @@ import org.apache.hadoop.mapreduce.Reducer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
  * Created by Zalak on 5/4/2015.
  */
-public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, IntegerTwoDArrayWritable, Text, Text>
+public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, BooleanTwoDArrayWritable, Text, Text>
 {
     int k;
     double probability;
@@ -35,12 +33,16 @@ public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, Intege
         super.setup(context);
     }
 
-    protected void reduce(Text key, Iterable<IntegerTwoDArrayWritable> adjMatrices, Context context) {
-        System.out.println("Entering reducer");
+    protected void reduce(Text key, Iterable<BooleanTwoDArrayWritable> adjMatrices, Context context) {
+       System.out.println("Entering reducer");
+
         System.out.println(key.toString());
         Mapping randomMapping = null;
-        for (IntegerTwoDArrayWritable adjMatrix : adjMatrices)
+        //System.out.print("Printing adj matrices: " + adjMatrices.toString());
+
+        for (BooleanTwoDArrayWritable adjMatrix : adjMatrices)
         {
+          //  System.out.println("Entering reduce iterable");
             randomMapping = convertAdjMatrixToMapping(adjMatrix.get());
             break;
         }
@@ -69,7 +71,7 @@ public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, Intege
                 System.out.println("\tSubGraph (g6) \"" + c.getKey() + "\" has count: " + c.getValue());
             }
         }*/
-        //print(randomMapping.getAdjMapping());
+        print(randomMapping.getAdjMapping());
 
 
 
@@ -77,16 +79,20 @@ public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, Intege
 
     Mapping convertAdjMatrixToMapping(Writable[][] adjMatrix)
     {
+        System.out.println("Converting mattric to mapping in reducer" + adjMatrix.length);
         AdjacencyMapping adjMap = new AdjacencyMapping(adjMatrix.length);
-        IntWritable one = new IntWritable(1);
+        BooleanWritable one = new BooleanWritable(true);
         List<String[]> randomEdgeList = new ArrayList<String[]>();
 
         for(int i=0; i< adjMatrix.length; i++)
         {
+          //  System.out.println("\n" + adjMatrix[i].length);
             for(int j =0; j < adjMatrix[i].length; j++)
             {
+            //    System.out.println(adjMatrix[i][j] + " " +  i + " : " + j  + " ");
                 if(adjMatrix[i][j].equals(one))
                 {
+                  //  System.out.println(adjMatrix[i][j] + "== " +  i + " : " + j  + " ");
                     if (adjMap.size() == 0)
                     {
                         adjMap.addAdjacentVertices(i, j);
@@ -122,7 +128,7 @@ public class SwitchingAlgorithmGenerateGraphReducer extends Reducer<Text, Intege
     }
 
     private void print(AdjacencyMapping map) {
-        System.out.println("\n" + "--------------------------------------------------------------------------\n");
+        System.out.println("\n" + "-----------------------------------------Reducer---------------------------------\n");
 
         for (int i = 0; i < map.size(); i++) {
             List<AdjacentVertexWithEdge> adjList = map.getNeighbours(i);

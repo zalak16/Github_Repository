@@ -6,6 +6,7 @@ import edu.uw.nemo.labeler.GraphFormat;
 import edu.uw.nemo.labeler.GraphLabel;
 import edu.uw.nemo.model.Mapping;
 import edu.uw.nemo.motifSignificant.CalculateMotifSignificance;
+import edu.uw.nemo.motifSignificant.SubgraphConcentration;
 import edu.uw.nemo.motifSignificant.explicitMethod.NemoControllerRandomGraphs;
 import edu.uw.nemo.motifSignificant.explicitMethod.RandomGraphCanonicalLabelling;
 import edu.uw.nemo.motifSignificant.explicitMethod.SwitchingAlgorithm.SwitchingAlgoirthmGenerateGraph;
@@ -76,8 +77,10 @@ public class NemoController {
 
     private void printSignificanceMotif(ArrayList<RandomGraphCanonicalLabelling> randomGraphLabel,  Map<String, List<Map.Entry<String, Long>>> inputGraphLabel, int totalRandomGraph, int k, double prob)
     {
-        CalculateMotifSignificance motifSignificance = new CalculateMotifSignificance();
-        motifSignificance.printSignificantMotif(randomGraphLabel, inputGraphLabel, prob, totalRandomGraph, k);
+        //CalculateMotifSignificance motifSignificance = new CalculateMotifSignificance();
+        //motifSignificance.printSignificantMotif(randomGraphLabel, inputGraphLabel, prob, totalRandomGraph, k);
+        SubgraphConcentration sc = new SubgraphConcentration();
+        sc.printSignificantMotif(randomGraphLabel, inputGraphLabel, totalRandomGraph, k, prob);
     }
     private Mapping parseFile(String fileName)
     {
@@ -100,6 +103,7 @@ public class NemoController {
     {
         NemoControllerRandomGraphs nemoRand = new NemoControllerRandomGraphs();
         return nemoRand.randomGraphGenerationSwitchingAlgorithm(inputMapping, k, totalRandomGraph, prob);
+        //return nemoRand.randomGraphGenerationAlgorithm1(inputMapping, k, totalRandomGraph, prob);
     }
 
     private void enumerateSubGraphs(Mapping mapping, GraphLabel label, int size) {

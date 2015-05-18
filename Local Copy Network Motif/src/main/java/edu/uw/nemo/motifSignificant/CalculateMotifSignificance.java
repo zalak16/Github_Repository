@@ -3,6 +3,7 @@ package edu.uw.nemo.motifSignificant;
 import edu.uw.nemo.labeler.GraphFormat;
 import edu.uw.nemo.motifSignificant.explicitMethod.RandomGraphCanonicalLabelling;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -44,6 +45,8 @@ public class CalculateMotifSignificance
         return labelMapping;
     }
 
+
+
     public void printSignificantMotif(ArrayList<RandomGraphCanonicalLabelling>randomGraphLabelList, Map<String, List<Map.Entry<String, Long>>> inputGraphLabel, double prob, int totalRandomGraph, int k)
     {
         HashMap<String, Long> inputGraphLabelCount = mapLabeltoCount(inputGraphLabel, 1.0);
@@ -57,7 +60,7 @@ public class CalculateMotifSignificance
             print(randomGraphLabel.labelCountMapping);
         }
 
-        if(totalRandomGraph >= 100)
+        if(totalRandomGraph >= 1000)
         {
               calculatePValue(randomGraphLabelList, inputGraphLabelCount, totalRandomGraph, k);
         }
@@ -93,11 +96,14 @@ public class CalculateMotifSignificance
                 x +=  Math.pow(difference, 2);
             }
         }
-        double sqrt = Math.sqrt(x);
-        return ((double)sqrt/(double)(N - 1));
+        double variance = (double)(x)/(double)(N);
+        double sqrt = Math.sqrt(variance);
+
+        DecimalFormat df = new DecimalFormat("#.###");
+        return Double.valueOf(df.format(sqrt));
     }
 
-    private void calculateZScore(ArrayList<RandomGraphCanonicalLabelling> randomGraphLabelList, HashMap<String, Long> inputGraphLabelCount, int N, int k)
+   private void calculateZScore(ArrayList<RandomGraphCanonicalLabelling> randomGraphLabelList, HashMap<String, Long> inputGraphLabelCount, int N, int k)
     {
 
         HashMap<String, Double> labelZscore = new HashMap<String, Double>();
@@ -118,6 +124,7 @@ public class CalculateMotifSignificance
             if(label.getValue() >= 2.0)
             {
                 System.out.println("Significant Motif for size " + k + " subgraph is " + label.getKey());
+                System.out.println("Z-Score for motif " + label.getKey() + " is " + label.getValue());
             }
         }
 
@@ -149,9 +156,11 @@ public class CalculateMotifSignificance
         for(Map.Entry<String, Integer> label : labelCount.entrySet())
         {
             double pvalue = (double)label.getValue()/(double)N;
+            System.out.println("p-value for motif "  + label.getKey() + "for size " + k + "is:  " + label.getValue());
             if(pvalue < 0.01)
             {
                 System.out.println("Significant Motif for size " + k + " subgraph is " + label.getKey());
+                System.out.println("p-value for motif " + label.getKey() + " is " + label.getValue());
             }
         }
 

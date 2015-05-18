@@ -7,10 +7,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Text;
 
-import org.apache.hadoop.io.TwoDArrayWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -32,6 +30,7 @@ public class GraphGeneratorJob
     private Configuration conf;
     public static double probability;
     public static int size;
+    public static int networkSize;
 
 
     /**
@@ -67,6 +66,7 @@ public class GraphGeneratorJob
 
         Path biologicalNetworkFilePath = new Path(args[0]);
         this.mapping = parseFile(fs.open(biologicalNetworkFilePath));
+        this.networkSize = mapping.getNodeCount();
 
         long endTime = System.currentTimeMillis();
         logFileStream.println("Parsing graph file took " + (endTime - startTime) + "ms.");
@@ -80,7 +80,6 @@ public class GraphGeneratorJob
 
         //Number of random graphs to be generated
         int NRandomGraph = Integer.parseInt(args[2]);
-
         try
         {
            fileWriter = new PrintStream(fileOutputStream, true, "UTF-8");
@@ -110,7 +109,13 @@ public class GraphGeneratorJob
 
         Job job = createJob(args);
 
+
         FileInputFormat.setInputPaths(job, new Path(input));
+
+        System.out.println("Max split size: " + FileInputFormat.getMaxSplitSize(job));
+        FileInputFormat.setMaxInputSplitSize(job, 100);
+        FileInputFormat.setMinInputSplitSize(job, 100);
+        System.out.println("Max split size: " + FileInputFormat.getMaxSplitSize(job));
         FileOutputFormat.setOutputPath(job, new Path(output));
 
         //submit job to clusters and wait for it to complete
@@ -130,14 +135,19 @@ public class GraphGeneratorJob
      */
     private Job createJob(String args[]) throws IOException, URISyntaxException {
 
+        //this.conf.setLong("mapreduce.input.fileinputformat.split.maxsize", 10);
+        //this.conf.setLong("mapreduce.input.fileinputformat.split.minsize", 10);
+
         Job job = Job.getInstance(this.conf, "randomGraphGeneratorJob");
         job.setJar(args[4]);
 
         //Specifies Output key and value type for Map and Reduce class.
         job.setOutputKeyClass(Text.class);
+
        // job.setMapOutputValueClass(MappingObject.class);
-       job.setMapOutputValueClass(IntegerTwoDArrayWritable.class);
+       job.setMapOutputValueClass(BooleanTwoDArrayWritable.class);
        job.setOutputValueClass(Text.class);
+
 
 
         //Sets Mapper and Reducer class.
