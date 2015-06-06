@@ -58,6 +58,7 @@ public class GenerateGraph
 
             Mapping map = generateRandomGraph();
             randomGraphList.add(map);
+            System.out.println("Graph: " + (i + 1));
             if(i == 0 || i == 100 || i == 500 || i == 400 || i ==800 || i == 1000)
             {
                 long end = System.currentTimeMillis();

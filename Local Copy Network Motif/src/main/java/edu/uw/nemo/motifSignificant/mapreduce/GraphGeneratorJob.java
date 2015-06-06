@@ -109,12 +109,12 @@ public class GraphGeneratorJob
 
         Job job = createJob(args);
 
-
-        FileInputFormat.setInputPaths(job, new Path(input));
-
         System.out.println("Max split size: " + FileInputFormat.getMaxSplitSize(job));
         FileInputFormat.setMaxInputSplitSize(job, 100);
         FileInputFormat.setMinInputSplitSize(job, 100);
+
+        FileInputFormat.setInputPaths(job, new Path(input));
+
         System.out.println("Max split size: " + FileInputFormat.getMaxSplitSize(job));
         FileOutputFormat.setOutputPath(job, new Path(output));
 
@@ -135,8 +135,8 @@ public class GraphGeneratorJob
      */
     private Job createJob(String args[]) throws IOException, URISyntaxException {
 
-        //this.conf.setLong("mapreduce.input.fileinputformat.split.maxsize", 10);
-        //this.conf.setLong("mapreduce.input.fileinputformat.split.minsize", 10);
+        this.conf.setLong("mapreduce.input.fileinputformat.split.maxsize", 100); // 200 bytes or 500 bytes
+        this.conf.setLong("mapreduce.input.fileinputformat.split.minsize", 100);
 
         Job job = Job.getInstance(this.conf, "randomGraphGeneratorJob");
         job.setJar(args[4]);

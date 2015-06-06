@@ -77,7 +77,7 @@ public class NemoController {
 
     private void printSignificanceMotif(ArrayList<RandomGraphCanonicalLabelling> randomGraphLabel,  Map<String, List<Map.Entry<String, Long>>> inputGraphLabel, int totalRandomGraph, int k, double prob)
     {
-        //CalculateMotifSignificance motifSignificance = new CalculateMotifSignificance();
+       // CalculateMotifSignificance motifSignificance = new CalculateMotifSignificance();
         //motifSignificance.printSignificantMotif(randomGraphLabel, inputGraphLabel, prob, totalRandomGraph, k);
         SubgraphConcentration sc = new SubgraphConcentration();
         sc.printSignificantMotif(randomGraphLabel, inputGraphLabel, totalRandomGraph, k, prob);
@@ -102,8 +102,8 @@ public class NemoController {
     private ArrayList<RandomGraphCanonicalLabelling>  randomGraphGeneration(Mapping inputMapping, int k, int totalRandomGraph, double prob)
     {
         NemoControllerRandomGraphs nemoRand = new NemoControllerRandomGraphs();
-        return nemoRand.randomGraphGenerationSwitchingAlgorithm(inputMapping, k, totalRandomGraph, prob);
-        //return nemoRand.randomGraphGenerationAlgorithm1(inputMapping, k, totalRandomGraph, prob);
+       // return nemoRand.randomGraphGenerationSwitchingAlgorithm(inputMapping, k, totalRandomGraph, prob);
+        return nemoRand.randomGraphGenerationAlgorithm1(inputMapping, k, totalRandomGraph, prob);
     }
 
     private void enumerateSubGraphs(Mapping mapping, GraphLabel label, int size) {

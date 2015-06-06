@@ -37,9 +37,14 @@ public class SwitchingAlgoirthmGenerateGraph
     {
         List<Mapping> randomGraphList = new ArrayList<Mapping>();
         System.out.println("Input Graph");
-
+        long start = System.currentTimeMillis();
         for(int i = 0; i<n; i++)
         {
+            if(i == 0 || i == 100 || i == 500 || i == 400 || i ==800 || i == 1000)
+            {
+                long end = System.currentTimeMillis();
+                System.out.println("Time taken to generate " + (i+1) + " random graphs is: " + (end - start));
+            }
             System.out.println("\n Graph " + (i+1) + "\n");
             Mapping map = generateGraph();
             randomGraphList.add(map);

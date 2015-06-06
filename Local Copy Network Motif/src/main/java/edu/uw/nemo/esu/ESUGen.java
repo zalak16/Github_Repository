@@ -107,6 +107,7 @@ public class ESUGen {
     List<Integer> getSampleNodes(int totalNodes, double prob)
     {
         List<Integer> nodeList = new ArrayList<Integer>();
+        //System.out.println(totalNodes);
         if(totalNodes == 0)
         {
             nodeList.add(-1);
@@ -117,10 +118,12 @@ public class ESUGen {
         int n = (int)rem;
         n =n + 1;
 
-        if(prob < 0.6) //case of small probabilities
+        if(prob > 0.0 && prob < 0.6) //case of small probabilities
         {
+          //  System.out.println(n);
             while(n != 0)
             {
+               // System.out.println(n);
                 int pos = randomNumberGenerator(totalNodes);
                 if(!sel[pos])
                 {
@@ -136,7 +139,13 @@ public class ESUGen {
         //so random number generates number which are are not going get selected. Those number will be less.
         else //case of large probabilities
         {
-            n = totalNodes - n;
+            if(prob == 1.0)
+            {
+                n = totalNodes;
+            }
+            else {
+                n = totalNodes - n;
+            }
             while(n != 0)
             {
                 int pos = randomNumberGenerator(totalNodes);

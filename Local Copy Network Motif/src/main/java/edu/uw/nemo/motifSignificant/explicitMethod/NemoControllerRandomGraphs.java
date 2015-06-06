@@ -19,16 +19,26 @@ public class NemoControllerRandomGraphs {
 
      public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationSwitchingAlgorithm(Mapping mapping, int size, int nRandomGraph, double probability)
      {
+         System.out.println("Switching algorithm");
+
         SwitchingAlgoirthmGenerateGraph graphGenerator = new SwitchingAlgoirthmGenerateGraph(mapping);
         long start = System.currentTimeMillis();
         List<Mapping> randomGraphList = graphGenerator.generateGraph(nRandomGraph);
         long end = System.currentTimeMillis();
+
         System.out.print("\n Time taken to generate " + nRandomGraph + " random graphs is: " + (end - start));
         ArrayList<RandomGraphCanonicalLabelling> canonicalSubgraphList = new ArrayList<RandomGraphCanonicalLabelling>();
         int count = 1;
 
+        start = System.currentTimeMillis();
         for (Mapping graph : randomGraphList) {
             System.out.println("############# Random Graph " + count + "####################");
+
+            if(count == 0 || count == 100 || count == 500 || count == 400 || count ==800 || count == 1000) {
+                end = System.currentTimeMillis();
+                System.out.println("Time taken to enumerate subgraph for random graph  " + (count) + " is: " + (end - start));
+            }
+
             GraphLabel label = new GraphLabel(false);
             this.enumerateSubGraphs(graph, label, size, probability);
             System.out.println("Number of subgraphs enumerated: " + label.getSubgraphCount());
@@ -61,14 +71,21 @@ public class NemoControllerRandomGraphs {
      */
     public ArrayList<RandomGraphCanonicalLabelling> randomGraphGenerationAlgorithm1(Mapping mapping, int size, int nRandomGraph, double probability)
     {
+
+        System.out.println("Preserving number of edges and vertexes");
+
         GenerateGraph graphGenerator = new GenerateGraph(mapping);
         List<Mapping> randomGraphList = graphGenerator.generateRandomGraph(nRandomGraph);
+
         ArrayList<RandomGraphCanonicalLabelling> canonicalSubgraphList = new ArrayList<RandomGraphCanonicalLabelling>();
+
         int count = 1;
         long start = System.currentTimeMillis();
 
         for (Mapping graph : randomGraphList) {
+
             System.out.println("############# Random Graph " + count + "####################");
+
             if(count == 0 || count == 100 || count == 500 || count == 400 || count ==800 || count == 1000) {
                 long end = System.currentTimeMillis();
                 System.out.println("Time taken to enumerate subgraph for random graph  " + (count) + " is: " + (end - start));
